@@ -2,12 +2,15 @@
 
 {% block title %}Welcome{% endblock %}
 
+{% block main_class %}container py-4{% endblock %}
+
+
 {% block content %}
 
 <!-- Hero section -->
 <section class="row align-items-center mb-5">
     <div class="col-md-6 mb-4 mb-md-0">
-        <h1 class="display-5 fw-bold mb-3">Know where your time really goes.</h1>
+        <h1 class="display-5 fw-bold mb-3">Know where your <span class="accent-word">time</span> really goes.</h1>
         <p class="lead">
             Track your activities, see the patterns, and design a schedule that
             actually matches the life you want.
@@ -19,7 +22,8 @@
     </div>
 
     <div class="col-md-6 text-center">
-        <img src="{{ url_for('static', filename='hero-img.png') }}" alt="Landing pagr image - Clock and time tracking"
+        <!-- Image generated using chatGPT / DALL·E. Inspiration from freepik.com (author freepik) -->
+        <img src="{{ url_for('static', filename='hero-img.png') }}" alt="Landing page image - Clock and time tracking"
             class="img-fluid">
     </div>
 </section>

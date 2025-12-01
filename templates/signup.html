@@ -1,8 +1,52 @@
 {% extends "layout.html" %}
 
-{% block title %}Sessions{% endblock %}
+{% block title %}Signup{% endblock %}
+
+{% block main_class %}main-center-y{% endblock %}
 
 {% block content %}
-<h1>Sessions</h1>
-<p>Sessions page placeholder.</p>
+
+<div class="container my-5">
+    <div class="row">
+
+        <!-- Left side (image) -->
+        <div class="col-md-6 d-none d-md-block">
+            <img src="{{ url_for('static', filename='signup-img.png') }}" class="img-fluid" alt="Signup illustration">
+        </div>
+
+        <!-- Right side (form) -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="w-75">
+                <h2 class="mb-4 text-center">Hello!</h2>
+                <p class="text-center text-muted small">Let's get you set up!</p>
+
+                <!-- Login form (Adapted from Bootstrap documentation: forms overview)-->
+                <form action="/signup" method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="signupEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="signupEmail" aria-describedby="emailHelp"
+                            name="email" required>
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-secondary d-block mx-auto">Create Account</button>
+                </form>
+
+                <div class="d-flex justify-content-center align-items-center gap-1 mt-5">
+                    <span class="text-muted small"><b>Already have an account?</b></span>
+                    <a href="/login" class="btn btn-link p-0">Log In</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

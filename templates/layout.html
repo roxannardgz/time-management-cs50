@@ -36,10 +36,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Log In</a>
+                        <a class="nav-link" href="{{ url_for('login') }}">Log In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Sign Up</a>
+                        <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +48,7 @@
 
 
     <!-- Main page content -->
-    <main class="container py-4">
+    <main class="{% block main_class %}{% endblock %}">
 
         <!-- Flash messages (ChatGPT Suggestion) -->
         {% if get_flashed_messages() %}
