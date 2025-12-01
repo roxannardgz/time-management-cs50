@@ -2,88 +2,87 @@
 
 {% block title %}Welcome{% endblock %}
 
-{% block main_class %}container py-4{% endblock %}
-
 
 {% block content %}
 
-<!-- Hero section -->
-<section class="row align-items-center mb-5">
-    <div class="col-md-6 mb-4 mb-md-0">
-        <h1 class="display-5 fw-bold mb-3">Know where your <span class="accent-word">time</span> really goes.</h1>
-        <p class="lead">
-            Track your activities, see the patterns, and design a schedule that
-            actually matches the life you want.
-        </p>
-        <div class="mt-3">
-            <a href="#" class="btn btn-primary me-2">Get started</a>
-            <a href="#" class="btn btn-outline-secondary">View demo</a>
-        </div>
-    </div>
-
-    <div class="col-md-6 text-center">
-        <!-- Image generated using chatGPT / DALL·E. Inspiration from freepik.com (author freepik) -->
-        <img src="{{ url_for('static', filename='hero-img.png') }}" alt="Landing page image - Clock and time tracking"
-            class="img-fluid">
-    </div>
-</section>
-
-<!-- How it works -->
-<section class="mb-5">
-    <h2 class="text-center mb-4">How it works</h2>
-
-    <div class="row g-4">
-        <div class="col-md-3">
-            <div class="card h-100 text-center border-0">
-                <div class="card-body">
-                    <div class="fs-1 mb-2">1</div>
-                    <h5 class="card-title">Create your account</h5>
-                    <p class="card-text small">
-                        Set up your profile and choose the areas of life you want to track
-                        (study, work, rest, hobbies, etc.).
-                    </p>
-                </div>
+<div class="container py-4">
+    <!-- Hero section -->
+    <section class="row align-items-center mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <h1 class="display-5 fw-bold mb-3">Know where your <span class="accent-word">time</span> really goes.</h1>
+            <p class="lead">
+                Track your activities, see the patterns, and design a schedule that
+                actually matches the life you want.
+            </p>
+            <div class="mt-3">
+                <a href="#" class="btn btn-primary me-2">Get started</a>
+                <a href="#" class="btn btn-outline-secondary">View demo</a>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card h-100 text-center border-0">
-                <div class="card-body">
-                    <div class="fs-1 mb-2">2</div>
-                    <h5 class="card-title">Register activities</h5>
-                    <p class="card-text small">
-                        Start and stop sessions with one click whenever you begin or end
-                        an activity.
-                    </p>
+        <div class="col-md-6 text-center">
+            <!-- Image generated using chatGPT / DALL·E. Inspiration from freepik.com (author freepik) -->
+            <img src="{{ url_for('static', filename='hero-img.png') }}"
+                alt="Landing page image - Clock and time tracking" class="img-fluid">
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="mb-5">
+        <h2 class="text-center mb-4">How it works</h2>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-0">
+                    <div class="card-body">
+                        <div class="fs-1 mb-2">1</div>
+                        <h5 class="card-title">Create your account</h5>
+                        <p class="card-text small">
+                            Set up your profile and choose the areas of life you want to track
+                            (study, work, rest, hobbies, etc.).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-0">
+                    <div class="card-body">
+                        <div class="fs-1 mb-2">2</div>
+                        <h5 class="card-title">Register activities</h5>
+                        <p class="card-text small">
+                            Start and stop sessions with one click whenever you begin or end
+                            an activity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-0">
+                    <div class="card-body">
+                        <div class="fs-1 mb-2">3</div>
+                        <h5 class="card-title">See your time stats</h5>
+                        <p class="card-text small">
+                            Get a clear view of where your hours go each day, week, and month.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 text-center border-0">
+                    <div class="card-body">
+                        <div class="fs-1 mb-2">4</div>
+                        <h5 class="card-title">Optimize your schedule</h5>
+                        <p class="card-text small">
+                            Compare reality with your ideal week and adjust how you spend
+                            your time.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-3">
-            <div class="card h-100 text-center border-0">
-                <div class="card-body">
-                    <div class="fs-1 mb-2">3</div>
-                    <h5 class="card-title">See your time stats</h5>
-                    <p class="card-text small">
-                        Get a clear view of where your hours go each day, week, and month.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card h-100 text-center border-0">
-                <div class="card-body">
-                    <div class="fs-1 mb-2">4</div>
-                    <h5 class="card-title">Optimize your schedule</h5>
-                    <p class="card-text small">
-                        Compare reality with your ideal week and adjust how you spend
-                        your time.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+    </section>
+</div>
 {% endblock %}

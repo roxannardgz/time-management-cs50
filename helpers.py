@@ -1,5 +1,17 @@
-import requests
+import sqlite3
 
-from flask import redirect, render_template, session
+from flask import g, current_app
 from functools import wraps
 
+
+def get_db():
+    if "db" not in g:
+        g.db = sqlite3.connect(current_app.config["DATABASE"])
+        g.db.row_factory = sqlite3.Row
+    return g.db
+
+
+def close_db(exception):
+    db = g.pop("db", None)
+    if db is not None:
+        db.close()

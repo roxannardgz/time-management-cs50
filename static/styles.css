@@ -24,7 +24,10 @@ main {
 }
 
 .filled-side {
-    background-color: #ffeed1;
+    background: linear-gradient(to bottom,
+            #fffdf8 0%,
+            #fff7e9 40%,
+            #ffeed1 100%);
 }
 
 .btn-primary {
@@ -52,7 +55,7 @@ main {
 }
 
 .btn-outline-secondary:hover {
-    background-color: #ffeed1;
+    background-color: #fbf5eb;
     border-color: #ffeed1;
     color: #4c2e19;
 }
