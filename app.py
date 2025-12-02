@@ -35,7 +35,7 @@ def load_logged_in_user():
     else:
         db = get_db()
         g.user = db.execute(
-            "SELECT * FROM users WHERE id = ?",
+            "SELECT * FROM users WHERE user_id = ?",
             (user_id,)
         ).fetchone()
 
@@ -57,7 +57,7 @@ def activities():
 
 
 
-# TODO create account
+# Create account
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     """Sign user up"""
@@ -87,10 +87,7 @@ def signup():
             )
             db.commit()
         except Exception:
-            # flash("Username already taken, please try a different one.", "warning")
-            #flash(Markup('Email already registered. Try a different one or <a href="/login" class="alert-link">Log in</a> instead.'), "warning")
             flash(Markup(f'Email already registered. Try a different one or <a href="{url_for("login")}" class="alert-link">Log in</a> instead.'), "warning")
-
             return redirect(url_for('signup'))
     
 
@@ -100,22 +97,49 @@ def signup():
 
 
 
-
-
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    """Log user in"""
 
     # User reached via POST
     if request.method == "POST":
-        pass
+        email = request.form.get("email", "").strip()
+        password = request.form.get("password")
 
+        # Input validation
+        if not email or not password:
+            flash("All fields are required.", "warning")
+            return render_template("login.html")
+
+        db = get_db()
+        user = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+
+        # If email not in db or password is incorrct
+        if user is None or not check_password_hash(user['hash'], password):
+            flash("Invalid email and/or password. Please try again.", "warning")
+            return render_template("login.html")
+        
+        # Log in user
+        session.clear()
+        session["user_id"] = user["user_id"]
+
+        return redirect(url_for("dashboard"))
+            
     # User reached via GET
-    else:
-        return render_template("login.html")
+    return render_template("login.html")
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
+
 
 
 # TODO logout
 #session.clear()
+
+
 
 
 
