@@ -96,7 +96,7 @@ def signup():
         return render_template("signup.html")
 
 
-
+# Log in to dashboard
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """Log user in"""
@@ -129,6 +129,7 @@ def login():
     return render_template("login.html")
 
 
+# Dashboard and user activity
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -137,7 +138,15 @@ def dashboard():
 
 
 # TODO logout
-#session.clear()
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    
+    # Forget any session data
+    session.clear()
+
+    # Redirect the user to the main page
+    return redirect(url_for("index"))
 
 
 
