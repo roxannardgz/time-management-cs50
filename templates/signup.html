@@ -20,20 +20,22 @@
 
                 <!-- Login form (Adapted from Bootstrap documentation: forms overview)-->
                 <!-- https://getbootstrap.com/docs/5.3/forms/overview/ -->
-                <form action="/signup" method="post">
+                <form action="/signup" method="post" autocomplete="off">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
+                        <input type="text" class="form-control" id="name" name="name" autocomplete="off"
+                            placeholder="e.g Fulano" required>
                     </div>
                     <div class="mb-3">
                         <label for="signupEmail" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="signupEmail" aria-describedby="emailHelp"
-                            name="email" required>
+                            name="email" autocomplete="off" placeholder="e.g fulano@example.com" required>
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3"> <!-- TODO: add eye to show password -->
                         <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" required>
+                        <input type="password" class="form-control" id="loginPassword" name="password"
+                            autocomplete="new-password" placeholder="8+ characters" required>
                     </div>
                     <button type="submit" class="btn btn-secondary d-block mx-auto">Create Account</button>
                 </form>

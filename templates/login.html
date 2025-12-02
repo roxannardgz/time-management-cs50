@@ -19,16 +19,17 @@
                 <p class="text-center text-muted small mb-2">Welcome back! 👋</p>
 
                 <!-- Login form (Adapted from Bootstrap documentation: forms overview)-->
-                <form action="/login" method="post">
+                <form action="/login" method="post" autocomplete="off">
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label">Email address</label>
                         <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp"
-                            name="email" required>
+                            name="email" autocomplete="off" placeholder="name@example.com" required>
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" required>
+                        <input type="password" class="form-control" id="loginPassword" name="password"
+                            autocomplete="new-password" required>
                     </div>
                     <button type="submit" class="btn btn-secondary d-block mx-auto">Login to Dashboard</button>
                 </form>
