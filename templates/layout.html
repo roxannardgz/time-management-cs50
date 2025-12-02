@@ -51,13 +51,15 @@
     <main class="{% block main_class %}{% endblock %}">
 
         <!-- Flash messages (ChatGPT Suggestion) -->
-        {% if get_flashed_messages() %}
-        <div class="alert alert-primary mb-3" role="alert">
-            {% for message in get_flashed_messages() %}
-            {{ message }}<br>
-            {% endfor %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mb-3" role="alert">
+            {{ message|safe }}
         </div>
+        {% endfor %}
         {% endif %}
+        {% endwith %}
 
 
         {% block content %}{% endblock %}

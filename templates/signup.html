@@ -19,6 +19,7 @@
                 <p class="text-center text-muted small">Let's get you set up!</p>
 
                 <!-- Login form (Adapted from Bootstrap documentation: forms overview)-->
+                <!-- https://getbootstrap.com/docs/5.3/forms/overview/ -->
                 <form action="/signup" method="post">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -30,7 +31,7 @@
                             name="email" required>
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3"> <!-- TODO: add eye to show password -->
                         <label for="loginPassword" class="form-label">Password</label>
                         <input type="password" class="form-control" id="loginPassword" name="password" required>
                     </div>
