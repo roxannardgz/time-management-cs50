@@ -6,6 +6,7 @@ from helpers import get_db, close_db, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 from markupsafe import Markup
 
+from config import CATEGORIES
 
 import traceback
 
@@ -39,6 +40,28 @@ def load_logged_in_user():
             (user_id,)
         ).fetchone()
 
+@app.before_request
+def required_setup_if_needed():
+    if g.get("user") is None:
+        return
+    
+    if g.user["setup_completed"]:
+        return
+    
+    allowed_endpoints = {
+        "activities",
+        "logout",
+        "login",
+        "signup",
+        "static",
+        "index"
+    }
+
+    if request.endpoint not in allowed_endpoints:
+        return redirect(url_for("activities"))
+
+
+
 @app.after_request
 def add_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
@@ -58,9 +81,16 @@ def sessions():
     return render_template("sessions.html")
 
 
-@app.route("/activities")
+@app.route("/activities", methods=["GET", "POST"])
 def activities():
-    return render_template("activities.html")
+    # User reached via POST
+    if request.method == "POST":
+        
+        return redirect(url_for("dashboard"))
+
+    # User reached via GET
+    return render_template("activities.html", categories=CATEGORIES)
+
 
 
 
@@ -96,6 +126,7 @@ def signup():
         except Exception:
             flash(Markup(f'Email already registered. Try a different one or <a href="{url_for("login")}" class="alert-link">Log in</a> instead.'), "warning")
             return redirect(url_for('signup'))
+        return redirect(url_for("login"))
     
 
     # User reached via GET
