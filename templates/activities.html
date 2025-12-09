@@ -7,20 +7,29 @@
         Select the subcategories you want to track in your daily life. You can change this later.
     </p>
 
+    <!-- Form generated with chatGPT -->
     <form method="post">
         {% for category, subcats in categories.items() %}
         <div class="mb-4">
-            <h5>{{ category }}</h5>
-
-            {% for sub in subcats %}
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="activities" value="{{ category }}::{{ sub }}"
-                    id="{{ category|replace(' ', '_') }}-{{ loop.index }}">
-                <label class="form-check-label" for="{{ category|replace(' ', '_') }}-{{ loop.index }}">
-                    {{ sub }}
+                <input class="form-check-input category-checkbox" type="checkbox" name="categories"
+                    value="{{ category }}" id="{{ category|replace(' ', '_') }}-cat">
+                <label class="form-check-label fw-bold" for="{{ category|replace(' ', '_') }}-cat">
+                    {{ category }}
                 </label>
             </div>
-            {% endfor %}
+
+            <div class="ms-3 mt-2 subcats d-none" data-category="{{ category }}">
+                {% for sub in subcats %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="activities" value="{{ category }}::{{ sub }}"
+                        id="{{ category|replace(' ', '_') }}-{{ loop.index }}" disabled>
+                    <label class="form-check-label" for="{{ category|replace(' ', '_') }}-{{ loop.index }}">
+                        {{ sub }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
         </div>
         {% endfor %}
 
@@ -29,4 +38,33 @@
         </button>
     </form>
 </div>
+
+<!-- Script generated with chatGPT -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const categoryCheckboxes = document.querySelectorAll(".category-checkbox");
+
+        categoryCheckboxes.forEach(function (cb) {
+            cb.addEventListener("change", function () {
+                const category = this.value;
+                const container = document.querySelector('.subcats[data-category="' + category + '"]');
+                if (!container) return;
+
+                const subChecks = container.querySelectorAll('input[type="checkbox"]');
+
+                if (this.checked) {
+                    container.classList.remove("d-none");
+                    subChecks.forEach(input => input.disabled = false);
+                } else {
+                    // uncheck + disable subcategories when category is unchecked
+                    subChecks.forEach(input => {
+                        input.checked = false;
+                        input.disabled = true;
+                    });
+                    container.classList.add("d-none");
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

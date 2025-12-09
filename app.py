@@ -41,7 +41,7 @@ def load_logged_in_user():
         ).fetchone()
 
 @app.before_request
-def required_setup_if_needed():
+def require_setup_if_needed():
     if g.get("user") is None:
         return
     
@@ -79,18 +79,6 @@ def index():
 @app.route("/sessions")
 def sessions():
     return render_template("sessions.html")
-
-
-@app.route("/activities", methods=["GET", "POST"])
-def activities():
-    # User reached via POST
-    if request.method == "POST":
-        
-        return redirect(url_for("dashboard"))
-
-    # User reached via GET
-    return render_template("activities.html", categories=CATEGORIES)
-
 
 
 
@@ -132,6 +120,62 @@ def signup():
     # User reached via GET
     else:
         return render_template("signup.html")
+
+
+# Complete activities setup -  categories and subcategories selection
+@app.route("/activities", methods=["GET", "POST"])
+def activities():
+    # User reached via POST
+    if request.method == "POST":
+        selected_categories = request.form.getlist("categories")
+        selected_activities = request.form.getlist("activities") # subcategories
+
+        # Parse selexted subcategories into a dict
+        chosen_by_cat = {}
+        for item in selected_activities:
+            category, subcat = item.split("::", 1)
+            chosen_by_cat.setdefault(category, []).append(subcat)
+
+        # Enfore the selection of at least 5 categories
+        if len(selected_categories) < 5:
+            flash("Please select at least 5 categories.", "warning")
+            return render_template(
+                   "activities.html",
+                   categories=CATEGORIES,
+                   selected_categories=selected_categories,
+                   selected_activities=selected_activities,
+                   )
+        
+        # Enforce the selection of at least one subcat when a category is selected
+        for cat in selected_categories:
+            if cat not in chosen_by_cat or len(chosen_by_cat[cat]) == 0:
+                flash(f"Please select at least one subcategory for {'cat'}", "warning")
+                return render_template(
+                    "activities.html",
+                    categories=CATEGORIES,
+                    selected_categories=selected_categories,
+                    selected_activities=selected_activities,
+                )
+            
+        # If valiation passes, save categories and sibcategories to DB
+        db = get_db()
+        for category, subcats in chosen_by_cat.items():
+            for subcat in subcats:
+                db.execute(
+                    "INSERT INTO user_activities (user_id, category, subcategory) \
+                    VALUES (?, ?, ?)",
+                    (g.user["user_id"], category, subcat)
+                )
+        # Update setup completed in users table
+        db.execute(
+            "UPDATE users SET setup_completed = 1 WHERE user_id = ?",
+            (g.user["user_id"],),
+        )
+        db.commit()
+        return redirect(url_for("dashboard"))
+
+    # User reached via GET
+    return render_template("activities.html", categories=CATEGORIES)
 
 
 # Log in to dashboard
