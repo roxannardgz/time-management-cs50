@@ -123,7 +123,6 @@ def signup():
         return render_template("signup.html")
 
 
-# TODO Complete activities setup -  categories and subcategories selection
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
     # User reached via POST
@@ -161,7 +160,7 @@ def activities():
         # If valiation passes, 
         db = get_db()
 
-        # Delete previous selection is exist **For when updating categories will be available**
+        # Delete previous selection if exists **For when updating categories will be available**
         # db.execute(
         #     "DELETE FROM user_activities WHERE user_id = ?",
         #     (g.user["user_id"],)
@@ -226,11 +225,37 @@ def login():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+
+    db = get_db()
+
+    # Get the cats and subcats of the user
+    rows = db.execute(
+        "SELECT category, subcategory \
+        FROM user_activities \
+        WHERE user_id = ?",
+        (g.user["user_id"],)
+    ).fetchall()
+
+    # Create the dict for the dropdowns
+    activities_by_cat = {}
+    for row in rows:
+        activities_by_cat.setdefault(row["category"], []).append(row["subcategory"])
+
+    # Load the active session (the one with null end ts)
+    active_session = db.execute(
+        "SELECT * \
+        FROM events \
+        WHERE user_id = ? AND end_ts IS NULL \
+        ORDER BY category, subcategory",
+        (g.user["user_id"],)
+    ).fetchone()
+
+    # Show page
+    return render_template("dashboard.html", 
+                           activities_by_cat=activities_by_cat, 
+                           active_session=active_session)
 
 
-
-# TODO logout
 @app.route("/logout")
 def logout():
     """Log user out"""
