@@ -4,6 +4,57 @@
 
 {% block content %}
 <h1>Dashboard</h1>
-<p>Dashboard page placeholder.</p>
+
+<div class="container py-4">
+
+    <!-- Row 1: Timer / current activity -->
+    <section class="mb-4">
+        <div class="card">
+            <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div>
+                    <h2 class="h4 mb-1">Now tracking</h2>
+                    <p class="text-muted mb-0">
+                        {% if active_session %}
+                        {{ active_session.activity_name }} · started at {{ active_session.start_time }}
+                        {% else %}
+                        No active session
+                        {% endif %}
+                    </p>
+                </div>
+
+                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2">
+                    <!-- category / subcategory dropdowns -->
+                    <!-- start/stop button -->
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Row 2: Stats -->
+    <section class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <!-- card: Today summary -->
+            </div>
+            <div class="col-md-4">
+                <!-- card: This week -->
+            </div>
+            <div class="col-md-4">
+                <!-- card: by category -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Row 3: Optional recent sessions -->
+    <!-- You can skip this at first -->
+    <!--
+  <section>
+    <h3 class="h5 mb-3">Recent sessions</h3>
+    ...
+  </section>
+  -->
+
+</div>
+
 <a href="{{ url_for('index') }}">Back</a>
 {% endblock %}
