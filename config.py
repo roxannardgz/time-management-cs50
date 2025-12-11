@@ -1,21 +1,21 @@
 CATEGORIES = {
     "Rest & Sleep": [
-        "Sleep (Night)",
+        "Sleep",
         "Napping / Short Rest",
         "Stillness / Lying Down",
-        "Meditation (Passive)"
+        "Meditation"
     ],
 
     "Focused Work": [
         "Deep Work",
         "Meetings / Collaboration",
-        "Administrative Tasks (Email, planning)",
+        "Administrative Tasks",
     ],
 
     "Learning & Growth": [
-        "Reading (Non-fiction / Educational)",
+        "Reading",
         "Online Courses / Tutorials",
-        "Skill Practice (Instrument, language)",
+        "Skill Practice",
         "Mentoring / Coaching (Receiving)",
         "Journaling / Reflection",
         "Study / Academic Work"
@@ -25,7 +25,7 @@ CATEGORIES = {
         "Workout / Sports",
         "Medical Appointments / Therapy",
         "Stretching / Mobility",
-        "Mental Break (Reset, non-entertainment)"
+        "Mental Break"
     ],
 
     "Home & Logistics": [
@@ -48,9 +48,9 @@ CATEGORIES = {
     "Leisure & Entertainment": [
         "TV / Streaming / Movies",
         "Gaming",
-        "Reading (Fiction / Entertainment)",
-        "Hobbies (Creative or casual)",
-        "Social Media Browsing"
+        "Reading (Entertainment)",
+        "Hobbies",
+        "Social Media"
     ],
 
     "Nourishment & Sustenance": [
@@ -64,7 +64,6 @@ CATEGORIES = {
     "Transportation & Travel": [
         "Work/Study Commute",
         "Personal Errands Commute",
-        "Public Transit / Car / Bike",
         "Long-Distance Travel"
     ],
 }

@@ -11,7 +11,6 @@ from config import CATEGORIES
 import traceback
 
 
-
 # Configure application
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -40,6 +39,7 @@ def load_logged_in_user():
             (user_id,)
         ).fetchone()
 
+
 @app.before_request
 def require_setup_if_needed():
     if g.get("user") is None:
@@ -60,6 +60,7 @@ def require_setup_if_needed():
     if request.endpoint not in allowed_endpoints:
         return redirect(url_for("activities"))
 
+# TODO; restrict access to certain pages after login (e.g landing page, signup page...)
 
 
 @app.after_request
@@ -122,7 +123,7 @@ def signup():
         return render_template("signup.html")
 
 
-# Complete activities setup -  categories and subcategories selection
+# TODO Complete activities setup -  categories and subcategories selection
 @app.route("/activities", methods=["GET", "POST"])
 def activities():
     # User reached via POST
@@ -157,8 +158,16 @@ def activities():
                     selected_activities=selected_activities,
                 )
             
-        # If valiation passes, save categories and sibcategories to DB
+        # If valiation passes, 
         db = get_db()
+
+        # Delete previous selection is exist **For when updating categories will be available**
+        # db.execute(
+        #     "DELETE FROM user_activities WHERE user_id = ?",
+        #     (g.user["user_id"],)
+        # )
+
+        # save categories and subcategories to DB
         for category, subcats in chosen_by_cat.items():
             for subcat in subcats:
                 db.execute(
@@ -166,11 +175,13 @@ def activities():
                     VALUES (?, ?, ?)",
                     (g.user["user_id"], category, subcat)
                 )
+
         # Update setup completed in users table
         db.execute(
             "UPDATE users SET setup_completed = 1 WHERE user_id = ?",
             (g.user["user_id"],),
         )
+
         db.commit()
         return redirect(url_for("dashboard"))
 
@@ -229,9 +240,5 @@ def logout():
 
     # Redirect the user to the main page
     return redirect(url_for("index"))
-
-
-
-
 
 
