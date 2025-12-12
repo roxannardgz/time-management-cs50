@@ -66,8 +66,21 @@ main {
     font-style: italic;
 }
 
+.dashboard-tracker {
+    max-width: 560px;
+}
 
 
+
+.tracker-btn {
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .tracker-btn {
+        width: 130px;
+    }
+}
 
 /* Colors
 #1F1D20

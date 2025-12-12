@@ -23,42 +23,46 @@
                 </div>
 
                 {% if not active_session %}
-                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
+                <div class="dashboard-tracker">
+                    <form method="post" action="/sessions/start" class="row g-2 align-items-end">
 
-                    <!-- Category dropdown -->
-                    <div>
-                        <label for="categorySelect" class="form-label mb-1">Category</label>
-                        <select id="categorySelect" name="category" class="form-select" required>
-                            <option value="" selected disabled>Choose category</option>
-                            {% for category, subcats in activities_by_cat.items() %}
-                            <option value="{{ category }}">{{ category }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                        <!-- Category Dropdown -->
+                        <div class="col-12 col-md-4">
+                            <label for="categorySelect" class="form-label mb-1">Category</label>
+                            <select id="categorySelect" name="category" class="form-select w-100" required>
+                                <option value="" selected disabled>Choose category</option>
+                                {% for category, subcats in activities_by_cat.items() %}
+                                <option value="{{ category }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-                    <!-- Subcategory dropdown -->
-                    <div>
-                        <label for="subcategorySelect" class="form-label mb-1">Subcategory</label>
-                        <select id="subcategorySelect" name="subcategory" class="form-select" required>
-                            <option value="" selected disabled>Choose subcategory</option>
-                        </select>
-                    </div>
+                        <!-- Subcategory Dropdown -->
+                        <div class="col-12 col-md-4">
+                            <label for="subcategorySelect" class="form-label mb-1">Subcategory</label>
+                            <select id="subcategorySelect" name="subcategory" class="form-select w-100" required>
+                                <option value="" selected disabled>Choose subcategory</option>
+                            </select>
+                        </div>
 
-                    <!-- Start button -->
-                    <div class="mt-2 mt-md-4">
-                        <button type="submit" class="btn btn-secondary">
-                            Start session
-                        </button>
-                    </div>
-                </form>
-                {% else %}
-                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
-                    <div class="mt-2 mt-md-4">
-                        <button type="submit" class="btn btn-outline-danger">
-                            Stop session
-                        </button>
-                    </div>
-                </form>
+                        <!-- Button - Start -->
+                        <div class="col-12 col-md-4">
+                            <button type="submit" class="btn btn-secondary tracker-btn w-100">
+                                Start session
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Button - Stop -->
+                    {% else %}
+                    <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
+                        <div class="mt-2 mt-md-4">
+                            <button type="submit" class="btn btn-outline-danger">
+                                Stop session
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 {% endif %}
 
             </div>
