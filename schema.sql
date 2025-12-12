@@ -1,4 +1,5 @@
 
+/*
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,8 +18,14 @@ CREATE TABLE user_activities (
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 );
 
-
-
---CREATE TABLE events (
-
---);
+*/
+DROP TABLE IF EXISTS events;
+CREATE TABLE events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    subcategory TEXT NOT NULL,
+    start_ts TIMESTAMP NOT NULL,
+    end_ts TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);

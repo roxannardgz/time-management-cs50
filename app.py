@@ -124,6 +124,7 @@ def signup():
 
 
 @app.route("/activities", methods=["GET", "POST"])
+@login_required
 def activities():
     # User reached via POST
     if request.method == "POST":
@@ -246,7 +247,6 @@ def dashboard():
         "SELECT * \
         FROM events \
         WHERE user_id = ? AND end_ts IS NULL \
-        ORDER BY category, subcategory",
         (g.user["user_id"],)
     ).fetchone()
 
@@ -254,6 +254,19 @@ def dashboard():
     return render_template("dashboard.html", 
                            activities_by_cat=activities_by_cat, 
                            active_session=active_session)
+
+
+
+@app.route("/sessions/start", methods=["POST"])
+@login_required
+def start_session():
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/sessions/stop", methods=["POST"])
+@login_required
+def stop_session():
+    return redirect(url_for("dashboard"))
 
 
 @app.route("/logout")
@@ -265,5 +278,4 @@ def logout():
 
     # Redirect the user to the main page
     return redirect(url_for("index"))
-
 

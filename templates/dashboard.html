@@ -14,50 +14,107 @@
                     <h2 class="h4 mb-1">Now tracking</h2>
                     <p class="text-muted mb-0">
                         {% if active_session %}
-                        {{ active_session.activity_name }} · started at {{ active_session.start_time }}
+                        {{ active_session["category"] }} · {{ active_session["subcategory"] }} · started at {{
+                        active_session["start_ts"] }}
                         {% else %}
                         No active session
                         {% endif %}
                     </p>
                 </div>
 
-                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-                    <!-- category / subcategory dropdowns -->
+                {% if not active_session %}
+                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
 
-                    <!-- start/stop button -->
+                    <!-- Category dropdown -->
+                    <div>
+                        <label for="categorySelect" class="form-label mb-1">Category</label>
+                        <select id="categorySelect" name="category" class="form-select" required>
+                            <option value="" selected disabled>Choose category</option>
+                            {% for category, subcats in activities_by_cat.items() %}
+                            <option value="{{ category }}">{{ category }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Subcategory dropdown -->
+                    <div>
+                        <label for="subcategorySelect" class="form-label mb-1">Subcategory</label>
+                        <select id="subcategorySelect" name="subcategory" class="form-select" required>
+                            <option value="" selected disabled>Choose subcategory</option>
+                        </select>
+                    </div>
+
+                    <!-- Start button -->
+                    <div class="mt-2 mt-md-4">
+                        <button type="submit" class="btn btn-secondary">
+                            Start session
+                        </button>
+                    </div>
                 </form>
+                {% else %}
+                <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
+                    <div class="mt-2 mt-md-4">
+                        <button type="submit" class="btn btn-outline-danger">
+                            Stop session
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+
             </div>
         </div>
     </section>
 
-    <!-- Row 2: Stats -->
+
+
+    <!-- Row 2: Dashboard Section -->
     <section class="mb-4">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <!-- card: Today summary -->
-            </div>
-            <div class="col-md-4">
-                <!-- card: This week -->
-            </div>
-            <div class="col-md-4">
-                <!-- card: by category -->
+        <div class="card">
+            <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div>
+                    <h2>Dashboard Placeholder</h2>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Row 3: Optional recent sessions -->
-    <!-- You can skip this at first -->
-    <!--
-  <section>
-    <h3 class="h5 mb-3">Recent sessions</h3>
-    ...
-  </section>
-  -->
-
-</div>
-
-<a href="{{ url_for('index') }}">Back</a>
 
 
 
-{% endblock %}
+
+    <a href="{{ url_for('index') }}">Back</a>
+
+    <!-- Generated using ChatGPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const activitiesByCat = {{ activities_by_cat | tojson
+        }};
+        const categorySelect = document.getElementById("categorySelect");
+        const subcategorySelect = document.getElementById("subcategorySelect");
+
+        if (!categorySelect || !subcategorySelect) return;
+
+        function populateSubcats(cat) {
+            const subcats = activitiesByCat[cat] || [];
+            subcategorySelect.innerHTML =
+                '<option value="" selected disabled>Choose subcategory</option>';
+
+            subcats.forEach(sub => {
+                const opt = document.createElement("option");
+                opt.value = sub;
+                opt.textContent = sub;
+                subcategorySelect.appendChild(opt);
+            });
+        }
+
+        categorySelect.addEventListener("change", function () {
+            populateSubcats(this.value);
+        });
+
+    // Optional (future): to preselect categories
+    // if (categorySelect.value) populateSubcats(categorySelect.value);
+  });
+    </script>
+
+
+    {% endblock %}
