@@ -246,9 +246,10 @@ def dashboard():
     active_session = db.execute(
         "SELECT * \
         FROM events \
-        WHERE user_id = ? AND end_ts IS NULL \
+        WHERE user_id = ? AND end_ts IS NULL",
         (g.user["user_id"],)
     ).fetchone()
+
 
     # Show page
     return render_template("dashboard.html", 
@@ -260,12 +261,65 @@ def dashboard():
 @app.route("/sessions/start", methods=["POST"])
 @login_required
 def start_session():
+    category = request.form.get("category")
+    subcategory = request.form.get("subcategory")
+
+    # Validation: both values are selected
+    if not category or not subcategory:
+        flash("Please choose a category and subcategory to start recording", "warning")
+        return redirect(url_for("dashboard"))
+    
+    db = get_db()
+
+    # Validation: there is no existing active session
+    existing = db.execute(
+        "SELECT event_id FROM events WHERE user_id = ? AND end_ts IS NULL",
+        (g.user["user_id"],)
+    ).fetchone()
+
+    if existing is not None:
+        flash("You already have an active session. Stop it before starting a new one.", "warning")
+        return redirect(url_for("dashboard"))
+    
+    # If validation passed
+    start_ts = datetime.now().isoformat(timespec="seconds")
+
+    db.execute(
+        "INSERT INTO events (user_id, category, subcategory, start_ts) \
+        VALUES (?, ?, ?, ?)",
+        (g.user["user_id"], category, subcategory, start_ts)
+    )
+    db.commit()
+
     return redirect(url_for("dashboard"))
 
 
 @app.route("/sessions/stop", methods=["POST"])
 @login_required
 def stop_session():
+
+    db = get_db()
+
+    active = db.execute(
+        "SELECT event_id \
+        FROM events \
+        WHERE user_id = ? AND end_ts IS NULL",
+        (g.user["user_id"],)
+    ).fetchone()
+
+    if active is None:
+        flash("There is no active session to stop", "warning")
+        return redirect(url_for("dashboard"))
+    
+    end_ts = datetime.now().isoformat(timespec="seconds")
+
+    db.execute(
+        "UPDATE events SET end_ts = ? WHERE event_id = ?",
+        (end_ts, active["event_id"])
+    )
+
+    db.commit()
+
     return redirect(url_for("dashboard"))
 
 

@@ -51,19 +51,20 @@
                                 Start session
                             </button>
                         </div>
-                    </form>
 
-                    <!-- Button - Stop -->
-                    {% else %}
-                    <form class="d-flex flex-column flex-md-row align-items-md-center gap-2" method="post" action="#">
-                        <div class="mt-2 mt-md-4">
-                            <button type="submit" class="btn btn-outline-danger">
-                                Stop session
-                            </button>
-                        </div>
+                    </form>
+                </div>
+
+                {% else %}
+                <div class="dashboard-tracker">
+                    <form method="post" action="/sessions/stop">
+                        <button type="submit" class="btn btn-outline-danger tracker-btn w-100">
+                            Stop session
+                        </button>
                     </form>
                 </div>
                 {% endif %}
+
 
             </div>
         </div>
