@@ -9,6 +9,8 @@ from markupsafe import Markup
 from config import CATEGORIES
 
 import traceback
+import charts
+import pandas as pd
 
 
 # Configure application
@@ -250,11 +252,32 @@ def dashboard():
         (g.user["user_id"],)
     ).fetchone()
 
+    # Query for daily by category
+    query = """
+        SELECT 
+            category,
+            SUM(total_seconds) AS total_time_spent_seconds
+        FROM vw_daily_activity
+        WHERE user_id = ? AND event_date = DATE('now', 'localtime')
+        GROUP BY category
+        """
+
+    print("DEBUG g.user:", g.user)
+
+    df_today_by_category = pd.read_sql_query(query, db, params=(g.user["user_id"],))
+    
+    
+    df_today_by_category["total_time_spent_hours"] = df_today_by_category["total_time_spent_seconds"]/3600
+
+    chart_today_by_category = charts.today_by_category(df_today_by_category)
+    div_today_by_category = charts.fig_to_div(chart_today_by_category)
+
 
     # Show page
     return render_template("dashboard.html", 
                            activities_by_cat=activities_by_cat, 
-                           active_session=active_session)
+                           active_session=active_session,
+                           div_today_by_category=div_today_by_category)
 
 
 

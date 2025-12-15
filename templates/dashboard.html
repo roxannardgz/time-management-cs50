@@ -75,11 +75,18 @@
     <!-- Row 2: Dashboard Section -->
     <section class="mb-4">
         <div class="card">
+
             <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div>
                     <h2>Dashboard Placeholder</h2>
+                    {% if div_today_by_category %}
+                    {{ div_today_by_category | safe }}
+                    {% else %}
+                    <p>No data yet for today.</p>
+                    {% endif %}
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -92,7 +99,7 @@
     <!-- Generated using ChatGPT -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const activitiesByCat = {{ activities_by_cat | tojson
+            const activitiesByCat = {{ activities_by_cat| tojson
         }};
         const categorySelect = document.getElementById("categorySelect");
         const subcategorySelect = document.getElementById("subcategorySelect");
