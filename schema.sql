@@ -1,5 +1,4 @@
 
-/*
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,16 +28,4 @@ CREATE TABLE events (
     end_ts TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-*/
 
-CREATE VIEW IF NOT EXISTS vw_events_clean AS 
-    SELECT 
-        event_id,
-        user_id,
-        category,
-        subcategory,
-        start_ts,
-        end_ts,
-        (unixepoch(end_ts) - unixepoch(start_ts))/60 AS duration_minutes
-    FROM events
-    WHERE end_ts IS NOT NULL;

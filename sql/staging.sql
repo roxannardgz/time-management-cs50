@@ -1,4 +1,4 @@
-DROP VIEW vw_events_facts;
+DROP VIEW IF EXISTS vw_events_facts;
 CREATE VIEW IF NOT EXISTS vw_events_facts AS 
     SELECT 
         event_id,
