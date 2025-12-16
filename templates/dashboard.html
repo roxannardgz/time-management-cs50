@@ -93,7 +93,7 @@
                 <div class="row g-3 align-items-stretch">
 
                     <!-- TOP – METRICS -->
-                    <div class="row mb-3 mt-3">
+                    <div class="row my-3">
                         <div class="col-12">
                             <div class="card flex-fill">
                                 <div class="card-body">
@@ -126,10 +126,10 @@
                         <div class="card flex-fill">
                             <div class="card-body">
                                 <h3 class="h6">Chart 1</h3>
-                                {% if div_today_by_category %}
-                                {{ div_today_by_category | safe }}
+                                {% if chart_divs %}
+                                {{ chart_divs.div_today_by_category | safe }}
                                 {% else %}
-                                <p class="mb-0">No data yet.</p>
+                                <p>No data today.</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -157,8 +157,6 @@
             </div> <!-- /card-body -->
         </div> <!-- /card -->
     </section>
-
-
 
 
 
@@ -195,6 +193,5 @@
     // if (categorySelect.value) populateSubcats(categorySelect.value);
   });
     </script>
-
 
     {% endblock %}

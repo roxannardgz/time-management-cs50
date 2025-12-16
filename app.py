@@ -262,22 +262,55 @@ def dashboard():
         GROUP BY category
         """
 
-    print("DEBUG g.user:", g.user)
-
     df_today_by_category = pd.read_sql_query(query, db, params=(g.user["user_id"],))
-    
-    
-    df_today_by_category["total_time_spent_hours"] = df_today_by_category["total_time_spent_seconds"]/3600
 
-    chart_today_by_category = charts.today_by_category(df_today_by_category)
-    div_today_by_category = charts.fig_to_div(chart_today_by_category)
+
+    period = request.args.get("period", "today")
+    
+    # Check if there is data for today (if the df_today_by_category is empty)
+    if df_today_by_category.empty:
+        chart_divs = {}
+        kpi_divs = {}
+    
+    else:
+        # Calculate time in h
+        df_today_by_category["total_time_spent_hours"] = df_today_by_category["total_time_spent_seconds"]/3600
+
+        # Build chart and convert to div
+        chart_today_by_category = charts.today_by_category(df_today_by_category)
+        div_today_by_category = charts.fig_to_div(chart_today_by_category)
+
+        # KPI cards values
+        total_time_tracked = df_today_by_category["total_time_spent_seconds"].sum()/3600
+        top_category = df_today_by_category.iloc[0]["category"]
+
+        # Query for categories breakdown
+        query = """
+            SELECT    
+                subcategory,
+                SUM(total_seconds) AS total_time_spent_seconds
+            FROM vw_daily_activity
+            WHERE user_id = ? AND category = ?
+            GROUP BY subcategory
+            """
+        
+        df_subcategory_breakdown = pd.read_sql_query(query, db, params=(g.user["user_id"], top_category))
+        
+        chart_divs = {"div_today_by_category": div_today_by_category,
+                       "df_subcategory_breakdown": df_subcategory_breakdown}
+        kpi_divs = {"total_time_tracked": total_time_tracked,
+                     "top_category": top_category}
+        
+        
 
 
     # Show page
     return render_template("dashboard.html", 
                            activities_by_cat=activities_by_cat, 
                            active_session=active_session,
-                           div_today_by_category=div_today_by_category)
+                           period=period,
+                           chart_divs=chart_divs,
+                           kpi_divs = kpi_divs)
 
 
 
