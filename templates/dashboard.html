@@ -65,29 +65,97 @@
                 </div>
                 {% endif %}
 
-
             </div>
         </div>
     </section>
 
 
-
     <!-- Row 2: Dashboard Section -->
     <section class="mb-4">
         <div class="card">
+            <div class="card-body p-4">
 
-            <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                <div>
-                    <h2>Dashboard Placeholder</h2>
-                    {% if div_today_by_category %}
-                    {{ div_today_by_category | safe }}
-                    {% else %}
-                    <p>No data yet for today.</p>
-                    {% endif %}
+                <!-- Dashboard header -->
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h4 mb-0">Dashboard</h2>
+
+                    <form method="get" class="d-flex align-items-center gap-2">
+                        <label for="periodSelect" class="form-label mb-0 small text-muted">View</label>
+                        <select id="periodSelect" name="period" class="form-select form-select-sm"
+                            onchange="this.form.submit()">
+                            <option value="today" {% if period=="today" %}selected{% endif %}>Today</option>
+                            <option value="week" {% if period=="week" %}selected{% endif %}>Last 7 days</option>
+                        </select>
+                    </form>
                 </div>
-            </div>
 
-        </div>
+                <!-- Main grid -->
+                <div class="row g-3 align-items-stretch">
+
+                    <!-- TOP – METRICS -->
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12">
+                            <div class="card flex-fill">
+                                <div class="card-body">
+                                    <div class="row mb-3 g-3">
+                                        <div class="col-12 col-md-4">
+                                            <div class="card">
+                                                <div class="card-body">Placeholder</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="card">
+                                                <div class="card-body">Placeholder</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="card">
+                                                <div class="card-body">Placeholder</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- LEFT -->
+                    <div class="col-12 col-lg-8 d-flex flex-column gap-3">
+                        <div class="card flex-fill">
+                            <div class="card-body">
+                                <h3 class="h6">Chart 1</h3>
+                                {% if div_today_by_category %}
+                                {{ div_today_by_category | safe }}
+                                {% else %}
+                                <p class="mb-0">No data yet.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card flex-fill">
+                            <div class="card-body">
+                                <h3 class="h6">Chart 2</h3>
+                                <p class="text-muted mb-0">Placeholder</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="col-12 col-lg-4 d-flex">
+                        <div class="card w-100 h-100">
+                            <div class="card-body">
+                                <h3 class="h6">Chart 3</h3>
+                                <p class="text-muted mb-0">Placeholder</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> <!-- /card-body -->
+        </div> <!-- /card -->
     </section>
 
 
