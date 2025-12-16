@@ -37,7 +37,9 @@ def load_logged_in_user():
     else:
         db = get_db()
         g.user = db.execute(
-            "SELECT * FROM users WHERE user_id = ?",
+            """
+            SELECT * FROM users WHERE user_id = ?
+            """,
             (user_id,)
         ).fetchone()
 
@@ -207,7 +209,11 @@ def login():
             return render_template("login.html")
 
         db = get_db()
-        user = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+        user = db.execute(
+            """SELECT * 
+            FROM users 
+            WHERE email=?""",
+              (email,)).fetchone()
 
         # If email not in db or password is incorrct
         if user is None or not check_password_hash(user['hash'], password):
@@ -233,9 +239,11 @@ def dashboard():
 
     # Get the cats and subcats of the user
     rows = db.execute(
-        "SELECT category, subcategory \
-        FROM user_activities \
-        WHERE user_id = ?",
+        """
+        SELECT category, subcategory
+        FROM user_activities
+        WHERE user_id = ?
+        """,
         (g.user["user_id"],)
     ).fetchall()
 
@@ -246,9 +254,11 @@ def dashboard():
 
     # Load the active session (the one with null end ts)
     active_session = db.execute(
-        "SELECT * \
-        FROM events \
-        WHERE user_id = ? AND end_ts IS NULL",
+        """
+        SELECT *
+        FROM events
+        WHERE user_id = ? AND end_ts IS NULL
+        """,
         (g.user["user_id"],)
     ).fetchone()
 
@@ -266,7 +276,7 @@ def dashboard():
 
 
     period = request.args.get("period", "today")
-    
+
     # Check if there is data for today (if the df_today_by_category is empty)
     if df_today_by_category.empty:
         chart_divs = {}
@@ -329,7 +339,11 @@ def start_session():
 
     # Validation: there is no existing active session
     existing = db.execute(
-        "SELECT event_id FROM events WHERE user_id = ? AND end_ts IS NULL",
+        """
+        SELECT event_id 
+        FROM events 
+        WHERE user_id = ? AND end_ts IS NULL
+        """,
         (g.user["user_id"],)
     ).fetchone()
 
@@ -357,9 +371,11 @@ def stop_session():
     db = get_db()
 
     active = db.execute(
-        "SELECT event_id \
-        FROM events \
-        WHERE user_id = ? AND end_ts IS NULL",
+        """
+        SELECT event_id
+        FROM events
+        WHERE user_id = ? AND end_ts IS NULL
+        """,
         (g.user["user_id"],)
     ).fetchone()
 
