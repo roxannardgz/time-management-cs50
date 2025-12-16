@@ -142,12 +142,15 @@
                         </div>
                     </div>
 
-                    <!-- RIGHT -->
                     <div class="col-12 col-lg-4 d-flex">
                         <div class="card w-100 h-100">
                             <div class="card-body">
                                 <h3 class="h6">Chart 3</h3>
-                                <p class="text-muted mb-0">Placeholder</p>
+                                {% if chart_divs %}
+                                {{ chart_divs.div_subcategory_breakdown | safe }}
+                                {% else %}
+                                <p>No data today.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
