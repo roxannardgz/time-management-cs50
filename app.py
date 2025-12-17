@@ -262,25 +262,33 @@ def dashboard():
         (g.user["user_id"],)
     ).fetchone()
 
-    # Query for daily by category
-    query = """
-        SELECT
-            category,
-        SUM(total_seconds) AS total_time_spent_seconds
-        FROM vw_daily_activity
-        WHERE user_id = ? AND event_date = DATE('now', 'localtime')
-        GROUP BY category
-        ORDER BY total_time_spent_seconds DESC
-        """
-
-
-    df_today_by_category = pd.read_sql_query(query, db, params=(g.user["user_id"],))
 
     # User selector for dashboard view: daily or last 7 days
     period = request.args.get("period", "today")
 
+    if period == "week":
+        date_filter = """
+            event_date BETWEEN DATE('now', 'localtime', '-6 days')
+                            AND DATE('now', 'localtime')
+        """
+    else:
+        date_filter = "event_date = DATE('now', 'localtime')"
+
+    # Query for hours by category
+    query = f"""
+        SELECT
+            category,
+        SUM(total_seconds) AS total_time_spent_seconds
+        FROM vw_daily_activity
+        WHERE user_id = ? AND {date_filter}
+        GROUP BY category
+        ORDER BY total_time_spent_seconds DESC
+        """
+
+    df_by_category = pd.read_sql_query(query, db, params=(g.user["user_id"],))
+
     # Check if there is not data for today (if the df_today_by_category is empty)
-    if df_today_by_category.empty:
+    if df_by_category.empty:
         chart_divs = {}
         kpis = {}
 
@@ -293,26 +301,36 @@ def dashboard():
     
     # If there is data for today (df_today_by_category)
     # Calculate time in h for hours by category bar chart
-    df_today_by_category["total_time_spent_hours"] = df_today_by_category["total_time_spent_seconds"]/3600
+    df_by_category["total_time_spent_hours"] = df_by_category["total_time_spent_seconds"]/3600
 
     # KPI cards values
-    total_time_tracked = (df_today_by_category["total_time_spent_seconds"].sum()/3600).round(2)
-    top_category = df_today_by_category.iloc[0]["category"]
+    total_time_tracked = (df_by_category["total_time_spent_seconds"].sum()/3600).round(2)
+    top_category = df_by_category.iloc[0]["category"]
 
     # Create the dict for category filter for today and validate or default to top category
-    categories_available = df_today_by_category["category"].tolist()
+    categories_available = df_by_category["category"].tolist()
     selected_category = request.args.get("category", top_category)
     if selected_category not in categories_available:
         selected_category = top_category
 
+    # Query dates 
+    query = f"""
+        SELECT DISTINCT event_date
+        FROM vw_daily_activity
+        WHERE user_id = ? 
+            AND {date_filter}
+        """
+    
+    dates = pd.read_sql_query(query, db, params=(g.user["user_id"],))
+    
     # Query for categories breakdown
-    query = """
+    query = f"""
         SELECT    
             subcategory,
             SUM(total_seconds) AS total_time_spent_seconds
         FROM vw_daily_activity
         WHERE user_id = ? 
-            AND event_date = DATE('now', 'localtime')
+            AND {date_filter}
             AND category = ?
         GROUP BY subcategory
         """
@@ -325,18 +343,26 @@ def dashboard():
     # Values for pie chart day division
     time_selected_category = df_subcategory_breakdown["total_time_spent_hours"].sum()
 
+    # Dates in range of view
+    min_date = pd.to_datetime(dates["event_date"]).min().date()
+    max_date = pd.to_datetime(dates["event_date"]).max().date()
+
+    days_in_period = (max_date - min_date).days + 1
+    hours_in_period = days_in_period * 24
+
+    # Data for category share pie
     df_category_share = pd.DataFrame({
         "label": [selected_category, "Rest of day"],
         "hours": [
             time_selected_category,
-            max(0, 24 - time_selected_category)
+            max(0, hours_in_period - time_selected_category)
         ]
     })
 
 
 
     # Build chart and convert to div
-    chart_today_by_category = charts.today_by_category(df_today_by_category)
+    chart_today_by_category = charts.today_by_category(df_by_category)
     div_today_by_category = charts.fig_to_div(chart_today_by_category)
 
     chart_subcategory_breakdown = charts.subcategories_breakdown(df_subcategory_breakdown, selected_category)
