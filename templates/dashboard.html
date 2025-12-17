@@ -125,7 +125,6 @@
                     <div class="col-12 col-lg-8 d-flex flex-column gap-3">
                         <div class="card flex-fill">
                             <div class="card-body">
-                                <h3 class="h6">Chart 1</h3>
                                 {% if chart_divs %}
                                 {{ chart_divs.div_today_by_category | safe }}
                                 {% else %}
@@ -136,7 +135,6 @@
 
                         <div class="card flex-fill">
                             <div class="card-body">
-                                <h3 class="h6">Chart 2</h3>
                                 <p class="text-muted mb-0">Placeholder</p>
                             </div>
                         </div>
@@ -149,7 +147,6 @@
 
                                 <!-- Header + dropdown INSIDE the card -->
                                 <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <h3 class="h6 mb-0">Chart 3</h3>
 
                                     <form method="get" class="d-flex align-items-center gap-2">
                                         <input type="hidden" name="period" value="{{ period }}">
@@ -193,8 +190,18 @@
 
     <!-- Generated using ChatGPT -->
     <script>
+        // Save scroll position before reload/navigation
+        window.addEventListener("beforeunload", () => {
+            sessionStorage.setItem("scrollY", window.scrollY);
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
-            const activitiesByCat = {{ activities_by_cat| tojson
+            // Restore scroll position after reload
+            const y = sessionStorage.getItem("scrollY");
+            if (y !== null) window.scrollTo(0, parseInt(y, 10));
+
+            // Dropdown logic
+            const activitiesByCat = {{ activities_by_cat | tojson
         }};
         const categorySelect = document.getElementById("categorySelect");
         const subcategorySelect = document.getElementById("subcategorySelect");
@@ -217,10 +224,7 @@
         categorySelect.addEventListener("change", function () {
             populateSubcats(this.value);
         });
-
-    // Optional (future): to preselect categories
-    // if (categorySelect.value) populateSubcats(categorySelect.value);
-  });
+    });
     </script>
 
     {% endblock %}
