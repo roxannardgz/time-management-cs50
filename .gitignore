@@ -1,9 +1,19 @@
-venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
 # VS Code
 .vscode/
 
-# macOS clutter
+# macOS
 .DS_Store
