@@ -264,13 +264,15 @@ def dashboard():
 
     # Query for daily by category
     query = """
-        SELECT 
+        SELECT
             category,
-            SUM(total_seconds) AS total_time_spent_seconds
+        SUM(total_seconds) AS total_time_spent_seconds
         FROM vw_daily_activity
         WHERE user_id = ? AND event_date = DATE('now', 'localtime')
         GROUP BY category
+        ORDER BY total_time_spent_seconds DESC
         """
+
 
     df_today_by_category = pd.read_sql_query(query, db, params=(g.user["user_id"],))
 
@@ -280,14 +282,14 @@ def dashboard():
     # Check if there is not data for today (if the df_today_by_category is empty)
     if df_today_by_category.empty:
         chart_divs = {}
-        kpi_divs = {}
+        kpis = {}
 
         return render_template("dashboard.html", 
                            activities_by_cat=activities_by_cat, 
                            active_session=active_session,
                            period=period,
                            chart_divs=chart_divs,
-                           kpi_divs = kpi_divs)
+                           kpis = kpis)
     
     # If there is data for today (df_today_by_category)
     # Calculate time in h
@@ -297,12 +299,11 @@ def dashboard():
     total_time_tracked = df_today_by_category["total_time_spent_seconds"].sum()/3600
     top_category = df_today_by_category.iloc[0]["category"]
 
+    # Create the dict for category filter for today and validate or default to top category
+    categories_available = df_today_by_category["category"].tolist()
     selected_category = request.args.get("category", top_category)
-
-    valid_categories = df_today_by_category["category"].tolist()
-    if selected_category not in valid_categories:
+    if selected_category not in categories_available:
         selected_category = top_category
-
 
     # Query for categories breakdown
     query = """
@@ -332,10 +333,9 @@ def dashboard():
     
     chart_divs = {"div_today_by_category": div_today_by_category,
                     "div_subcategory_breakdown": div_subcategory_breakdown}
-    kpi_divs = {"total_time_tracked": total_time_tracked,
+    kpis = {"total_time_tracked": total_time_tracked,
                     "top_category": top_category}
-        
-        
+
 
 
     # Show page
@@ -343,8 +343,10 @@ def dashboard():
                            activities_by_cat=activities_by_cat, 
                            active_session=active_session,
                            period=period,
+                           categories_available=categories_available,
+                           selected_category=selected_category,
                            chart_divs=chart_divs,
-                           kpi_divs = kpi_divs)
+                           kpis = kpis)
 
 
 

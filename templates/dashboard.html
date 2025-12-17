@@ -142,18 +142,44 @@
                         </div>
                     </div>
 
+                    <!-- RIGHT -->
                     <div class="col-12 col-lg-4 d-flex">
                         <div class="card w-100 h-100">
                             <div class="card-body">
-                                <h3 class="h6">Chart 3</h3>
+
+                                <!-- Header + dropdown INSIDE the card -->
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <h3 class="h6 mb-0">Chart 3</h3>
+
+                                    <form method="get" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="period" value="{{ period }}">
+
+                                        <label for="dashboardCategorySelect"
+                                            class="form-label mb-0 small text-muted">Category</label>
+
+                                        <select id="dashboardCategorySelect" name="category"
+                                            class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+                                            {% for category in categories_available %}
+                                            <option value="{{ category }}" {% if category==selected_category
+                                                %}selected{% endif %}>
+                                                {{ category }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </div>
+
+                                <!-- Chart -->
                                 {% if chart_divs %}
                                 {{ chart_divs.div_subcategory_breakdown | safe }}
                                 {% else %}
                                 <p>No data today.</p>
                                 {% endif %}
+
                             </div>
                         </div>
                     </div>
+
 
                 </div>
 
