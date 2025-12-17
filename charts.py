@@ -30,5 +30,25 @@ def subcategories_breakdown(df, selected_category):
     return fig
 
 
+def category_share_donut(df):
+    fig = px.pie(
+        df,
+        names="label",
+        values="hours",
+        hole=0.6
+    )
+    fig.update_traces(
+        textinfo="percent",
+        textposition="inside",
+        domain={"x": [0.05, 0.95], "y": [0.05, 0.95]}
+    )
+    fig.update_layout(
+        height=180,
+        showlegend=False,
+        margin=dict(l=0, r=0, t=0, b=0)
+    )
+    return fig
+
+
 def fig_to_div(fig):
     return pio.to_html(fig, full_html=False, include_plotlyjs="cdn")

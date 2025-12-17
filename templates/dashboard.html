@@ -93,37 +93,47 @@
                 <div class="row g-3 align-items-stretch">
 
                     <!-- TOP – METRICS -->
-                    <div class="row my-3">
-                        <div class="col-12">
-                            <div class="card flex-fill">
-                                <div class="card-body">
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-12 col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">Placeholder</div>
+                    <div class="col-12">
+                        <div class="row my-3">
+                            <div class="col-12">
+                                <div class="card flex-fill">
+                                    <div class="card-body">
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-12 col-md-4">
+                                                <div class="card">
+                                                    <div class="card-body kpis">
+                                                        <div class="kpi-label">Time tracked today</div>
+                                                        <div class="kpi-label">{{ kpis.total_time_tracked }}</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">Placeholder</div>
+
+                                            <div class="col-12 col-md-4">
+                                                <div class="card">
+                                                    <div class="card-body kpis">
+                                                        <div class="kpi-label">Most time spent on</div>
+                                                        <div class="kpi-label">{{ kpis.top_category }}</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <div class="card">
-                                                <div class="card-body">Placeholder</div>
+
+                                            <div class="col-12 col-md-4">
+                                                <div class="card">
+                                                    <div class="card-body">Placeholder</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
 
 
+
                     <!-- LEFT -->
-                    <div class="col-12 col-lg-8 d-flex flex-column gap-3">
-                        <div class="card flex-fill">
+                    <div class="col-12 col-lg-8 d-flex">
+                        <div class="card w-100 h-100">
                             <div class="card-body">
                                 {% if chart_divs %}
                                 {{ chart_divs.div_today_by_category | safe }}
@@ -132,27 +142,21 @@
                                 {% endif %}
                             </div>
                         </div>
-
-                        <div class="card flex-fill">
-                            <div class="card-body">
-                                <p class="text-muted mb-0">Placeholder</p>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- RIGHT -->
                     <div class="col-12 col-lg-4 d-flex">
                         <div class="card w-100 h-100">
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
 
-                                <!-- Header + dropdown INSIDE the card -->
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-
+                                <!-- Header + dropdown -->
+                                <div class="d-flex align-items-center justify-content-between mb-3">
                                     <form method="get" class="d-flex align-items-center gap-2">
                                         <input type="hidden" name="period" value="{{ period }}">
 
-                                        <label for="dashboardCategorySelect"
-                                            class="form-label mb-0 small text-muted">Category</label>
+                                        <label for="dashboardCategorySelect" class="form-label mb-0 small text-muted">
+                                            Category
+                                        </label>
 
                                         <select id="dashboardCategorySelect" name="category"
                                             class="form-select form-select-sm w-auto" onchange="this.form.submit()">
@@ -166,20 +170,35 @@
                                     </form>
                                 </div>
 
-                                <!-- Chart -->
                                 {% if chart_divs %}
-                                {{ chart_divs.div_subcategory_breakdown | safe }}
+
+                                <!-- Donut / category share -->
+                                <div class="mb-3">
+                                    {{ chart_divs.div_category_share | safe }}
+                                </div>
+
+                                <!-- Subcategory breakdown -->
+                                <div class="flex-grow-1">
+                                    {{ chart_divs.div_subcategory_breakdown | safe }}
+                                </div>
+
                                 {% else %}
                                 <p>No data today.</p>
                                 {% endif %}
-
                             </div>
                         </div>
                     </div>
 
+                    {% if period == "week" %} <!-- Bottom card only for week view -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h3 class="h6">Trend</h3>
+                            {{ chart_divs.trend | safe }}
+                        </div>
+                    </div>
+                    {% endif %}
 
                 </div>
-
             </div> <!-- /card-body -->
         </div> <!-- /card -->
     </section>
@@ -228,3 +247,13 @@
     </script>
 
     {% endblock %}
+
+
+
+
+    <!-- Dashboard desing inspiration -->
+    <!-- 
+    https://dribbble.com/shots/22951308-Coffee-Shop-Dashboard-Management
+    https://dribbble.com/shots/26192889-Novelty-Modern-Dashboard-UI-for-Cafe-Management
+    https://dribbble.com/shots/24784122-Coffee-Shop-Dashboard
+    -->

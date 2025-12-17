@@ -292,11 +292,11 @@ def dashboard():
                            kpis = kpis)
     
     # If there is data for today (df_today_by_category)
-    # Calculate time in h
+    # Calculate time in h for hours by category bar chart
     df_today_by_category["total_time_spent_hours"] = df_today_by_category["total_time_spent_seconds"]/3600
 
     # KPI cards values
-    total_time_tracked = df_today_by_category["total_time_spent_seconds"].sum()/3600
+    total_time_tracked = (df_today_by_category["total_time_spent_seconds"].sum()/3600).round(2)
     top_category = df_today_by_category.iloc[0]["category"]
 
     # Create the dict for category filter for today and validate or default to top category
@@ -322,6 +322,18 @@ def dashboard():
     # Calculate time in h
     df_subcategory_breakdown["total_time_spent_hours"] = df_subcategory_breakdown["total_time_spent_seconds"]/3600
 
+    # Values for pie chart day division
+    time_selected_category = df_subcategory_breakdown["total_time_spent_hours"].sum()
+
+    df_category_share = pd.DataFrame({
+        "label": [selected_category, "Rest of day"],
+        "hours": [
+            time_selected_category,
+            max(0, 24 - time_selected_category)
+        ]
+    })
+
+
 
     # Build chart and convert to div
     chart_today_by_category = charts.today_by_category(df_today_by_category)
@@ -330,9 +342,13 @@ def dashboard():
     chart_subcategory_breakdown = charts.subcategories_breakdown(df_subcategory_breakdown, selected_category)
     div_subcategory_breakdown = charts.fig_to_div(chart_subcategory_breakdown)
 
+    chart_category_share = charts.category_share_donut(df_category_share)
+    div_category_share = charts.fig_to_div(chart_category_share)
+
     
     chart_divs = {"div_today_by_category": div_today_by_category,
-                    "div_subcategory_breakdown": div_subcategory_breakdown}
+                    "div_subcategory_breakdown": div_subcategory_breakdown,
+                    "div_category_share": div_category_share}
     kpis = {"total_time_tracked": total_time_tracked,
                     "top_category": top_category}
 
