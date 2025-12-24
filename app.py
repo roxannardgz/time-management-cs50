@@ -154,7 +154,7 @@ def activities():
         # Enforce the selection of at least one subcat when a category is selected
         for cat in selected_categories:
             if cat not in chosen_by_cat or len(chosen_by_cat[cat]) == 0:
-                flash(f"Please select at least one subcategory for {'cat'}", "warning")
+                flash(f"Please select at least one subcategory for {cat}", "warning")
                 return render_template(
                     "activities.html",
                     categories=CATEGORIES,
