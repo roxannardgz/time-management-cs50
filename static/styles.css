@@ -82,6 +82,32 @@ main {
     }
 }
 
+.category-card {
+    background-color: #fffdf8;
+    /* very light cream */
+    border: 1px solid #ffeed1;
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+
+.category-card .form-check {
+    margin-bottom: 6px;
+}
+
+/* Subcategory container */
+.category-card .subcats {
+    border-left: 3px solid #ffeed1;
+    padding-left: 14px;
+    margin-top: 10px;
+}
+
+.category-card.is-open {
+    box-shadow: 0 8px 20px rgba(31, 29, 32, 0.08);
+    border-color: #e19b56;
+}
+
+
+
 /* Colors
 #1F1D20
 #b96d33

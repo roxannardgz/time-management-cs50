@@ -10,7 +10,7 @@
     <!-- Form generated with chatGPT -->
     <form method="post">
         {% for category, subcats in categories.items() %}
-        <div class="mb-4">
+        <div class="category-card mb-4">
             <div class="form-check">
                 <input class="form-check-input category-checkbox" type="checkbox" name="categories"
                     value="{{ category }}" id="{{ category|replace(' ', '_') }}-cat">
@@ -51,10 +51,10 @@
                 if (!container) return;
 
                 const subChecks = container.querySelectorAll('input[type="checkbox"]');
-
                 if (this.checked) {
                     container.classList.remove("d-none");
                     subChecks.forEach(input => input.disabled = false);
+                    this.closest(".category-card").classList.add("is-open");
                 } else {
                     // uncheck + disable subcategories when category is unchecked
                     subChecks.forEach(input => {
@@ -62,7 +62,9 @@
                         input.disabled = true;
                     });
                     container.classList.add("d-none");
+                    this.closest(".category-card").classList.remove("is-open");
                 }
+
             });
         });
     });
