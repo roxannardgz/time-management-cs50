@@ -32,12 +32,20 @@
                             name="email" autocomplete="off" placeholder="e.g fulano@example.com" required>
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
-                    <div class="mb-3"> <!-- TODO: add eye to show password -->
-                        <label for="loginPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password"
-                            autocomplete="new-password" placeholder="8+ characters" required>
+                    <div class="mb-4">
+                        <label for="signupPassword" class="form-label">Password</label>
+
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="signupPassword" name="password"
+                                autocomplete="new-password" placeholder="8+ characters" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password"
+                                data-target="signupPassword" aria-label="Show password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-secondary d-block mx-auto">Create Account</button>
+
                 </form>
 
                 <div class="d-flex justify-content-center align-items-center gap-1 mt-5">
