@@ -22,15 +22,16 @@
                 <form action="/login" method="post" autocomplete="off">
                     <div class="mb-4">
                         <label for="loginEmail" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="loginEmail" required>
+                        <input type="email" class="form-control" id="loginEmail" name="email" required>
                         <div class="form-text">We'll never share your email with anyone else.</div>
                     </div>
 
                     <div class="mb-4">
                         <label for="loginPassword" class="form-label">Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="loginPassword" required>
-                            <button type="button" class="btn btn-outline-secondary toggle-password">
+                            <input type="password" class="form-control" id="loginPassword" name="password" required>
+                            <button type="button" class="btn btn-outline-secondary toggle-password"
+                                data-target="loginPassword" aria-label="Show password">
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
@@ -42,7 +43,7 @@
 
                 <div class="d-flex flex-column align-items-center mt-5">
                     <p class="text-center text-muted small"><b>Don't have an account yet?</b></p>
-                    <a href="{{ url_for('signup') }}" class="btn btn-outline-secondary">Create a new one</a>
+                    <a href="{{ url_for('signup') }}" class="btn btn-link p-0">Create a new one</a>
                 </div>
 
             </div>
@@ -50,27 +51,6 @@
 
     </div>
 </div>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".toggle-password").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const inputId = btn.getAttribute("data-target");
-                const input = document.getElementById(inputId);
-                const icon = btn.querySelector("i");
-
-                if (!input) return;
-
-                const isHidden = input.type === "password";
-                input.type = isHidden ? "text" : "password";
-
-                icon.classList.toggle("bi-eye", !isHidden);
-                icon.classList.toggle("bi-eye-slash", isHidden);
-            });
-        });
-    });
-</script>
 
 
 {% endblock %}

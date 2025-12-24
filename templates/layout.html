@@ -118,6 +118,27 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
+    {% block scripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".toggle-password").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const inputId = btn.getAttribute("data-target");
+                    const input = document.getElementById(inputId);
+                    const icon = btn.querySelector("i");
+
+                    if (!input) return;
+
+                    const isHidden = input.type === "password";
+                    input.type = isHidden ? "text" : "password";
+
+                    icon.classList.toggle("bi-eye", !isHidden);
+                    icon.classList.toggle("bi-eye-slash", isHidden);
+                });
+            });
+        });
+    </script>
+    {% endblock %}
 </body>
 
 </html>
