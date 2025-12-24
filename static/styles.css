@@ -82,6 +82,11 @@ main {
     }
 }
 
+.input-group {
+    margin-top: 0.25rem;
+}
+
+
 .category-card {
     background-color: #fffdf8;
     /* very light cream */
@@ -107,6 +112,16 @@ main {
 }
 
 
+.toggle-password {
+    background-color: #fbf5eb;
+    border-color: #d6d3cf;
+}
+
+.toggle-password:hover {
+    background-color: #ffeed1;
+    border-color: #bc783d;
+    color: #1F1D20;
+}
 
 /* Colors
 #1F1D20
