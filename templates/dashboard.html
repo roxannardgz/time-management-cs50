@@ -11,16 +11,31 @@
         <div class="card">
             <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div>
-                    <h2 class="h4 mb-1">Now tracking</h2>
-                    <p class="text-muted mb-0">
+                    <h2 class="h3 mb-1">Welcome back, {{ user_name }}!</h2>
+
+                    <p class="mb-0">
                         {% if active_session %}
-                        {{ active_session["category"] }} · {{ active_session["subcategory"] }} · started at {{
-                        active_session["start_ts"] }}
+                        <span class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill
+                     status-pill status-pill--active small">
+                            <b>◉ Now tracking:</b>
+                            {{ active_session["category"] }}
+                            · {{ active_session["subcategory"] }}
+                            · <span class="text-muted">
+                                started at {{ active_session["start_ts"] | format_time }}
+                            </span>
+                        </span>
                         {% else %}
-                        No active session
+                        <span class="d-inline-flex align-items-center px-3 py-1 rounded-pill
+                     status-pill status-pill--inactive small">
+                            ◯ No active session
+                        </span>
                         {% endif %}
                     </p>
+
+
                 </div>
+
+
 
                 {% if not active_session %}
                 <div class="dashboard-tracker">
@@ -76,8 +91,7 @@
             <div class="card-body p-4">
 
                 <!-- Dashboard header -->
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h2 class="h4 mb-0">Dashboard</h2>
+                <div class="d-flex align-items-center justify-content-end mb-3">
 
                     <form method="get" class="d-flex align-items-center gap-2">
                         <label for="periodSelect" class="form-label mb-0 small text-muted">View</label>
@@ -94,40 +108,126 @@
 
                     <!-- TOP – METRICS -->
                     <div class="col-12">
-                        <div class="row my-3">
-                            <div class="col-12">
-                                <div class="card flex-fill">
-                                    <div class="card-body">
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-12 col-md-4">
-                                                <div class="card">
-                                                    <div class="card-body kpis">
-                                                        <div class="kpi-label">Time tracked</div>
-                                                        <div class="kpi-label">{{ kpis.total_time_tracked }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            <div class="col-12 col-md-4">
-                                                <div class="card">
-                                                    <div class="card-body kpis">
-                                                        <div class="kpi-label">Most time spent on</div>
-                                                        <div class="kpi-label">{{ kpis.top_category }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <!-- Row A: 2 wide cards -->
+                        <div class="row g-3 mb-3">
 
-                                            <div class="col-12 col-md-4">
-                                                <div class="card">
-                                                    <div class="card-body">Placeholder</div>
-                                                </div>
+                            <!-- 1) TIME TRACKED -->
+                            <div class="col-12 col-lg-6">
+                                <div class="card h-100">
+                                    <div class="card-body kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon">
+                                                <i class="bi bi-clock"></i>
                                             </div>
+                                            <div class="kpi-title text-uppercase">Time tracked</div>
+                                        </div>
+
+                                        <div class="kpi-main">
+                                            <div class="kpi-big">{{ kpis.total_time_tracked_hhmm }}</div>
+                                        </div>
+
+                                        <div class="kpi-footer">
+                                            <div class="progress kpi-progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                    style="width: {{ kpis.tracked_pct_period }}%;"
+                                                    aria-valuenow="{{ kpis.tracked_pct_period }}" aria-valuemin="0"
+                                                    aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="kpi-sub text-muted">{{ kpis.period_label }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- 2) MOST TIME SPENT ON -->
+                            <div class="col-12 col-lg-6">
+                                <div class="card h-100">
+                                    <div class="card-body kpi-card">
+                                        <div class="kpi-header">
+                                            <div class="kpi-icon">
+                                                <i class="bi bi-star"></i>
+                                            </div>
+                                            <div class="kpi-title text-uppercase">Most time spent on</div>
+                                        </div>
+
+                                        <div class="kpi-main">
+                                            <div class="kpi-big">{{ kpis.top_category }}</div>
+                                        </div>
+
+                                        <div class="kpi-footer">
+                                            <div class="progress kpi-progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                    style="width: {{ kpis.top_category_pct_of_tracked }}%;"
+                                                    aria-valuenow="{{ kpis.top_category_pct_of_tracked }}"
+                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="kpi-sub text-muted">{{ kpis.top_category_time_hhmm }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+                        <!-- Row B: 3 small cards -->
+                        <div class="row g-3">
+
+                            <!-- 3) ACTIVITIES -->
+                            <div class="col-12 col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body kpi-card kpi-card--small">
+                                        <div class="kpi-header kpi-header--small">
+                                            <div class="kpi-icon kpi-icon--small">
+                                                <i class="bi bi-list-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-main">
+                                            <div class="kpi-big">{{ kpis.activities_count }}</div>
+                                            <div class="kpi-title text-uppercase">Activities</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4) CATEGORIES -->
+                            <div class="col-12 col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body kpi-card kpi-card--small">
+                                        <div class="kpi-header kpi-header--small">
+                                            <div class="kpi-icon kpi-icon--small">
+                                                <i class="bi bi-grid"></i>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-main">
+                                            <div class="kpi-big">{{ kpis.categories_count }}</div>
+                                            <div class="kpi-title text-uppercase">Categories</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5) TIME % -->
+                            <div class="col-12 col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body kpi-card kpi-card--small">
+                                        <div class="kpi-header kpi-header--small">
+                                            <div class="kpi-icon kpi-icon--small">
+                                                <i class="bi bi-percent"></i>
+                                            </div>
+                                        </div>
+                                        <div class="kpi-main">
+                                            <div class="kpi-big">{{ kpis.tracked_pct_period | round(0) }}%</div>
+                                            <div class="kpi-title text-uppercase">Time</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
+
 
 
 
@@ -150,7 +250,8 @@
                             <div class="card-body d-flex flex-column">
 
                                 <!-- Header + dropdown -->
-                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center justify-content-end mb-3">
+
                                     <form method="get" class="d-flex align-items-center gap-2">
                                         <input type="hidden" name="period" value="{{ period }}">
 
@@ -190,10 +291,12 @@
                     </div>
 
                     {% if period == "week" %} <!-- Bottom card only for week view -->
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <h3 class="h6">Trend</h3>
-                            {{ chart_divs.trend | safe }}
+                    <div class="col-12">
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h3 class="h6">Trend</h3>
+                                {{ chart_divs.trend | safe }}
+                            </div>
                         </div>
                     </div>
                     {% endif %}

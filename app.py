@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, session, redirect, url
 from datetime import datetime
 from functools import wraps
 
-from helpers import get_db, close_db, login_required
+from helpers import get_db, close_db, login_required, seconds_to_hhmm
 from werkzeug.security import check_password_hash, generate_password_hash
 from markupsafe import Markup
 
@@ -11,6 +11,7 @@ from config import CATEGORIES
 import traceback
 import charts
 import pandas as pd
+
 
 
 # Configure application
@@ -262,6 +263,7 @@ def dashboard():
         (g.user["user_id"],)
     ).fetchone()
 
+    user_name = g.user['name']
 
     # User selector for dashboard view: daily or last 7 days
     period = request.args.get("period", "today")
@@ -290,22 +292,43 @@ def dashboard():
     # Check if there is not data for today (if the df_today_by_category is empty)
     if df_by_category.empty:
         chart_divs = {}
-        kpis = {}
+        kpis = {
+            "total_time_tracked_hhmm": "00:00",
+            "tracked_pct_period": 0,
+            "period_label": "24h" if period == "today" else "7 days",
+            "top_category": "—",
+            "top_category_time_hhmm": "00:00",
+            "top_category_pct_of_tracked": 0,
+            "activities_count": 0,
+            "categories_count": 0,
+        }
 
-        return render_template("dashboard.html", 
-                           activities_by_cat=activities_by_cat, 
-                           active_session=active_session,
-                           period=period,
-                           chart_divs=chart_divs,
-                           kpis = kpis)
+        return render_template(
+            "dashboard.html",
+            activities_by_cat=activities_by_cat,
+            active_session=active_session,
+            period=period,
+            chart_divs=chart_divs,
+            kpis=kpis,
+            user_name=user_name,
+        )
+
     
     # If there is data for today (df_today_by_category)
     # Calculate time in h for hours by category bar chart
     df_by_category["total_time_spent_hours"] = df_by_category["total_time_spent_seconds"]/3600
 
     # KPI cards values
-    total_time_tracked = (df_by_category["total_time_spent_seconds"].sum()/3600).round(2)
+    total_seconds_tracked = int(df_by_category["total_time_spent_seconds"].sum())
+    total_time_tracked_hhmm = seconds_to_hhmm(total_seconds_tracked)
+
     top_category = df_by_category.iloc[0]["category"]
+    top_category_seconds = int(df_by_category.iloc[0]["total_time_spent_seconds"])
+    top_category_time_hhmm = seconds_to_hhmm(top_category_seconds)
+
+
+    categories_count = int(df_by_category.shape[0])
+
 
     # Create the dict for category filter for today and validate or default to top category
     categories_available = df_by_category["category"].tolist()
@@ -337,6 +360,28 @@ def dashboard():
 
     df_subcategory_breakdown = pd.read_sql_query(query, db, params=(g.user["user_id"], selected_category))
 
+    # Activities (subcategories) count
+    if period == "week":
+        date_clause = """
+            DATE(start_ts, 'localtime')
+            BETWEEN DATE('now','localtime','-6 days')
+                AND DATE('now','localtime')
+        """
+    else:
+        date_clause = "DATE(start_ts, 'localtime') = DATE('now','localtime')"
+
+    query = f"""
+        SELECT COUNT(*) AS n
+        FROM events
+        WHERE user_id = ?
+        AND end_ts IS NOT NULL
+        AND {date_clause}
+    """
+
+    activities_count = db.execute(query, (g.user["user_id"],)).fetchone()["n"]
+
+
+
     # Calculate time in h
     df_subcategory_breakdown["total_time_spent_hours"] = df_subcategory_breakdown["total_time_spent_seconds"]/3600
 
@@ -350,15 +395,29 @@ def dashboard():
     days_in_period = (max_date - min_date).days + 1
     hours_in_period = days_in_period * 24
 
+    # 
+    if period == "week":
+        period_total_seconds = days_in_period * 24 * 3600
+        period_label = f"{days_in_period} days"
+    else:
+        period_total_seconds = 24 * 3600
+        period_label = "24h"
+
+    
+    tracked_pct_period = round((total_seconds_tracked / period_total_seconds) * 100, 1)
+    top_category_pct_of_tracked = round((top_category_seconds / total_seconds_tracked) * 100, 1) if total_seconds_tracked else 0
+
+
     # Data for category share pie
+    rest_label = "Rest of week" if period == "week" else "Rest of day"
+
     df_category_share = pd.DataFrame({
-        "label": [selected_category, "Rest of day"],
+        "label": [selected_category, rest_label],
         "hours": [
             time_selected_category,
             max(0, hours_in_period - time_selected_category)
         ]
     })
-
 
 
     # Build chart and convert to div
@@ -375,8 +434,19 @@ def dashboard():
     chart_divs = {"div_today_by_category": div_today_by_category,
                     "div_subcategory_breakdown": div_subcategory_breakdown,
                     "div_category_share": div_category_share}
-    kpis = {"total_time_tracked": total_time_tracked,
-                    "top_category": top_category}
+    kpis = {
+        "total_time_tracked_hhmm": total_time_tracked_hhmm,
+        "tracked_pct_period": tracked_pct_period,
+        "period_label": period_label,
+
+        "top_category": top_category,
+        "top_category_time_hhmm": top_category_time_hhmm,
+        "top_category_pct_of_tracked": top_category_pct_of_tracked,
+
+        "activities_count": activities_count,
+        "categories_count": categories_count,
+    }
+
 
 
 
@@ -388,7 +458,8 @@ def dashboard():
                            categories_available=categories_available,
                            selected_category=selected_category,
                            chart_divs=chart_divs,
-                           kpis = kpis)
+                           kpis = kpis,
+                           user_name=user_name)
 
 
 
@@ -473,3 +544,9 @@ def logout():
     # Redirect the user to the main page
     return redirect(url_for("index"))
 
+
+@app.template_filter("format_time")
+def format_time(value):
+    if isinstance(value, str):
+        value = datetime.fromisoformat(value)
+    return value.strftime("%H:%M:%S")

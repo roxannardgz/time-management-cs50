@@ -123,6 +123,142 @@ main {
     color: #1F1D20;
 }
 
+.status-pill {
+    background-color: #fbf5eb;
+    /* light background */
+    color: #1F1D20;
+    /* main text */
+    border: 1px solid #e0d8c8;
+    /* optional, subtle */
+}
+
+.status-pill--active {
+    background-color: #ffeed1;
+    color: #4c2e19;
+}
+
+.status-pill--inactive {
+    background-color: #f3f3f3;
+    color: #777;
+}
+
+.kpis .kpi-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.kpi-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #fbf5eb;
+    border: 1px solid #e0d8c8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon i {
+    font-size: 1.1rem;
+    color: #4c2e19;
+}
+
+.kpi-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+}
+
+.kpi-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.kpi-title {
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.kpi-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.kpi-big {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.kpi-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.kpi-sub {
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+/* Icon square */
+.kpi-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: #fbf5eb;
+    border: 1px solid #e0d8c8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-icon i {
+    font-size: 1.2rem;
+    color: #4c2e19;
+}
+
+/* Progress bar styling */
+.kpi-progress {
+    height: 10px;
+    width: 60%;
+    background-color: #e9e5dd;
+    border-radius: 999px;
+}
+
+.kpi-progress .progress-bar {
+    background-color: #bc783d;
+    border-radius: 999px;
+}
+
+/* Small cards */
+.kpi-card--small .kpi-big {
+    font-size: 1.4rem;
+}
+
+.kpi-header--small {
+    justify-content: center;
+}
+
+.kpi-icon--small {
+    width: 40px;
+    height: 40px;
+}
+
+
+
+
+
 /* Colors
 #1F1D20
 #b96d33

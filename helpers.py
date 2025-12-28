@@ -46,7 +46,8 @@ def login_required(f):
 
 
 
+def seconds_to_hhmm(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    return f"{int(hours):02d}:{int(minutes):02d}"
 
-# ---------------------------------------------
-# TEST
-# create an user with same email.
