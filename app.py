@@ -380,6 +380,20 @@ def dashboard():
 
     activities_count = db.execute(query, (g.user["user_id"],)).fetchone()["n"]
 
+    # Weekly trend
+    df_trend = pd.read_sql_query(
+        """
+        SELECT event_date, SUM(total_seconds) AS total_seconds
+        FROM vw_daily_activity
+        WHERE user_id = ?
+        AND event_date BETWEEN DATE('now','localtime','-6 days') AND DATE('now','localtime')
+        GROUP BY event_date
+        ORDER BY event_date
+        """,
+        db,
+        params=(g.user["user_id"],)
+    )
+    df_trend["hours"] = df_trend["total_seconds"] / 3600
 
 
     # Calculate time in h
@@ -430,10 +444,14 @@ def dashboard():
     chart_category_share = charts.category_share_donut(df_category_share)
     div_category_share = charts.fig_to_div(chart_category_share)
 
+    chart_weekly_trend = charts.weekly_trend(df_trend)
+    div_weekly_trend = charts.fig_to_div(chart_weekly_trend)
+
     
     chart_divs = {"div_today_by_category": div_today_by_category,
                     "div_subcategory_breakdown": div_subcategory_breakdown,
-                    "div_category_share": div_category_share}
+                    "div_category_share": div_category_share,
+                    "div_weekly_trend": div_weekly_trend}
     kpis = {
         "total_time_tracked_hhmm": total_time_tracked_hhmm,
         "tracked_pct_period": tracked_pct_period,
