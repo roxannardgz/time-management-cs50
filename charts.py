@@ -66,16 +66,27 @@ def subcategories_breakdown(df, selected_category):
         df,
         x="subcategory",
         y="total_time_spent_hours",
-        title=f"{selected_category} - subcategories"
     )
-    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10))
-    fig.update_yaxes(title="Hours", tickformat=".2f")
 
+    # One consistent color
     fig.update_traces(
-        marker=dict(color="#fbd6a3"),
-        marker_line_width=0
+        marker=dict(color="#bc783d"),
+        marker_line_width=0,
+        hovertemplate="%{x}<br>%{y:.2f} hours<extra></extra>",
     )
+
+    # No chart title; axis labels optional (I’d remove to keep it clean)
+    fig.update_layout(
+        title=None,
+        margin=dict(l=10, r=10, t=10, b=10),
+    )
+    fig.update_yaxes(title=None, tickformat=".2f")
+    fig.update_xaxes(title=None)
+    fig.update_xaxes(tickangle=-25)
+
+
     return apply_theme(fig, show_legend=False)
+
 
 
 # Donut chart for share of selected category of total time tracked
@@ -84,19 +95,26 @@ def category_share_donut(df):
         df,
         names="label",
         values="hours",
-        hole=0.6,
+        hole=0.62,
     )
 
     fig.update_traces(
-        marker=dict(colors=["#1F1D20", "#fbd6a3"]),
+        marker=dict(colors=["#bc783d", "#e9e5dd"], line=dict(width=0)),
         textinfo="percent",
         textposition="inside",
         sort=False,
+        hovertemplate="%{label}<br>%{value:.2f} hours (%{percent})<extra></extra>",
     )
 
-    fig.update_layout(height=180, margin=dict(l=0, r=0, t=0, b=0))
+    fig.update_layout(
+        title=None,
+        height=180,
+        showlegend=False,
+        margin=dict(l=0, r=0, t=0, b=0),
+    )
 
     return apply_theme(fig, show_legend=False)
+
 
 
 # Line chart for weekly trend - only week view
