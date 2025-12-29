@@ -381,20 +381,27 @@ def dashboard():
     activities_count = db.execute(query, (g.user["user_id"],)).fetchone()["n"]
 
     # Weekly trend
-    df_trend = pd.read_sql_query(
-        """
-        SELECT event_date, SUM(total_seconds) AS total_seconds
-        FROM vw_daily_activity
-        WHERE user_id = ?
-        AND event_date BETWEEN DATE('now','localtime','-6 days') AND DATE('now','localtime')
-        GROUP BY event_date
-        ORDER BY event_date
-        """,
-        db,
-        params=(g.user["user_id"],)
-    )
-    df_trend["hours"] = df_trend["total_seconds"] / 3600
+    div_weekly_trend = None
 
+    if period == "week":
+        df_trend = pd.read_sql_query(
+            """
+            SELECT event_date, category, SUM(total_seconds) AS total_seconds
+            FROM vw_daily_activity
+            WHERE user_id = ?
+            AND event_date BETWEEN DATE('now','localtime','-6 days') AND DATE('now','localtime')
+            GROUP BY event_date, category
+            ORDER BY event_date, category
+            """,
+            db,
+            params=(g.user["user_id"],)
+        )
+        df_trend["hours"] = df_trend["total_seconds"] / 3600
+
+        chart_weekly_trend = charts.weekly_trend_by_category(df_trend, selected_category)
+        div_weekly_trend = charts.fig_to_div(chart_weekly_trend)
+
+            
 
     # Calculate time in h
     df_subcategory_breakdown["total_time_spent_hours"] = df_subcategory_breakdown["total_time_spent_seconds"]/3600
@@ -435,7 +442,7 @@ def dashboard():
 
 
     # Build chart and convert to div
-    chart_today_by_category = charts.today_by_category(df_by_category)
+    chart_today_by_category = charts.today_by_category(df_by_category, selected_category)
     div_today_by_category = charts.fig_to_div(chart_today_by_category)
 
     chart_subcategory_breakdown = charts.subcategories_breakdown(df_subcategory_breakdown, selected_category)
@@ -443,9 +450,6 @@ def dashboard():
 
     chart_category_share = charts.category_share_donut(df_category_share)
     div_category_share = charts.fig_to_div(chart_category_share)
-
-    chart_weekly_trend = charts.weekly_trend(df_trend)
-    div_weekly_trend = charts.fig_to_div(chart_weekly_trend)
 
     
     chart_divs = {"div_today_by_category": div_today_by_category,
@@ -464,7 +468,6 @@ def dashboard():
         "activities_count": activities_count,
         "categories_count": categories_count,
     }
-
 
 
 

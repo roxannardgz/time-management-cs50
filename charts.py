@@ -1,5 +1,6 @@
 import plotly.express as px
 import plotly.io as pio
+import pandas as pd
 
 
 # Theme to apply to all charts
@@ -26,7 +27,7 @@ def apply_theme(fig, *, show_legend=False):
 
 
 # Bar chart: hours by category 
-def today_by_category(df):
+def today_by_category(df, selected_category):
     df = df.sort_values("total_time_spent_hours", ascending=True)
 
     fig = px.bar(
@@ -34,15 +35,27 @@ def today_by_category(df):
         x="total_time_spent_hours",
         y="category",
         orientation="h",
-        title="Hours by Category"
+        title=None,
     )
-    fig.update_layout(margin=dict(l=10, r=10, t=40, b=10))
-    fig.update_xaxes(title="Hours", tickformat=".2f")
+
+    fig = apply_theme(fig)
+
+    # color each bar: selected = accent, others muted
+    colors = []
+    for cat in df["category"]:
+        if selected_category and cat == selected_category:
+            colors.append("#bc783d")   # accent
+        else:
+            colors.append("#e0d8c8")   # muted
+    fig.update_traces(marker_color=colors)
+
+    # tooltip
     fig.update_traces(
-        marker=dict(color="#fbd6a3"),
-        marker_line_width=0
+        hovertemplate="%{y}<br>%{x:.2f} hours<extra></extra>"
     )
-    return apply_theme(fig, show_legend=False)
+
+    return fig
+
 
 
 # Bar chart for selected subcategory breakdown
@@ -87,19 +100,77 @@ def category_share_donut(df):
 
 
 # Line chart for weekly trend - only week view
-def weekly_trend(df):
-    fig = px.line(df, x="event_date", y="hours", markers=True, title=None)
-    fig.update_traces(line_width=3, marker_size=7)
-    fig.update_layout(height=220)
+def weekly_trend_by_category(df, selected_category):
+    df = df.copy()
+    df["event_date"] = pd.to_datetime(df["event_date"]).dt.normalize()
 
-    fig = apply_theme(fig, show_legend=False)
+    # Build a full daily index for the last 7 days shown in the data
+    start = df["event_date"].min()
+    end = df["event_date"].max()
+    all_days = pd.date_range(start=start, end=end, freq="D")
 
-    fig.update_traces(line=dict(color="#bc783d"), marker=dict(color="#bc783d"))
+    # Use all categories (from the df)
+    categories = sorted(df["category"].unique())
 
-    # tooltip
-    fig.update_traces(hovertemplate="%{x}<br>%{y:.2f} hours<extra></extra>")
+    # Create full grid (day x category)
+    grid = pd.MultiIndex.from_product(
+        [all_days, categories],
+        names=["event_date", "category"]
+    ).to_frame(index=False)
 
-    return fig
+    # Merge + fill missing with 0
+    df = grid.merge(df[["event_date", "category", "hours"]], on=["event_date", "category"], how="left")
+    df["hours"] = df["hours"].fillna(0)
+
+
+    fig = px.line(
+        df,
+        x="event_date",
+        y="hours",
+        color="category",
+        markers=True,
+    )
+
+    muted = "#c9c6c0"
+    highlight = "#bc783d"
+
+    selected_trace = None
+    other_traces = []
+
+    # Disable hover
+    for tr in fig.data:
+        tr.hoverinfo = "skip"
+        tr.hovertemplate = None
+
+    # Style + collect traces
+    for tr in fig.data:
+        if tr.name == selected_category:
+            tr.line.color = highlight
+            tr.line.width = 3.5
+            tr.opacity = 1
+
+            # turn hover back on only in highlighted category
+            tr.hoverinfo = "text"
+            tr.hovertemplate = "%{x|%b %d}<br>%{y:.2f} hours<extra></extra>"
+
+            selected_trace = tr
+        else:
+            tr.line.color = muted
+            tr.line.width = 2
+            tr.opacity = 0.35
+            other_traces.append(tr)
+
+    # Keep highlighted line on top
+    if selected_trace is not None:
+        fig.data = tuple(other_traces + [selected_trace])
+
+    # Smooth lines without resetting hover
+    for tr in fig.data:
+        tr.line.shape = "spline"
+        tr.line.smoothing = 0.4
+
+    return apply_theme(fig, show_legend=False)
+
 
 
 def fig_to_div(fig):
