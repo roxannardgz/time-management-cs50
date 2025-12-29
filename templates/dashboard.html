@@ -249,27 +249,30 @@
 
                     <!-- RIGHT -->
                     <div class="col-12 col-lg-4 d-flex">
-                        <div class="card w-100 h-100">
-                            <div class="card-body d-flex flex-column">
+                        <div class="w-100 d-flex flex-column gap-3">
 
-
-
-                                {% if chart_divs %}
-
-                                <!-- Donut / category share -->
-                                <div class="mb-3">
+                            <!-- Card 1: Donut -->
+                            <div class="card">
+                                <div class="card-body">
+                                    {% if chart_divs %}
                                     {{ chart_divs.div_category_share | safe }}
+                                    {% else %}
+                                    <p class="mb-0">No data.</p>
+                                    {% endif %}
                                 </div>
-
-                                <!-- Subcategory breakdown -->
-                                <div class="flex-grow-1">
-                                    {{ chart_divs.div_subcategory_breakdown | safe }}
-                                </div>
-
-                                {% else %}
-                                <p>No data today.</p>
-                                {% endif %}
                             </div>
+
+                            <!-- Card 2: Subcategory breakdown -->
+                            <div class="card flex-grow-1">
+                                <div class="card-body">
+                                    {% if chart_divs %}
+                                    {{ chart_divs.div_subcategory_breakdown | safe }}
+                                    {% else %}
+                                    <p class="mb-0">No data.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
