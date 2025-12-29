@@ -120,7 +120,9 @@
 
     {% block scripts %}
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", function () {
+
+            /* ===== Toggle password visibility ===== */
             document.querySelectorAll(".toggle-password").forEach(btn => {
                 btn.addEventListener("click", () => {
                     const inputId = btn.getAttribute("data-target");
@@ -136,9 +138,17 @@
                     icon.classList.toggle("bi-eye-slash", isHidden);
                 });
             });
+
+            /* ===== Bootstrap tooltips ===== */
+            document
+                .querySelectorAll('[data-bs-toggle="tooltip"]')
+                .forEach(el => new bootstrap.Tooltip(el));
+
         });
     </script>
     {% endblock %}
+
+
 </body>
 
 </html>

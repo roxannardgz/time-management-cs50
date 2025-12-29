@@ -238,6 +238,18 @@
                     <div class="col-12 col-lg-8 d-flex">
                         <div class="card w-100 h-100">
                             <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-info-circle chart-help text-muted" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Shows how your tracked time is distributed across categories for the selected period. The highlighted bar is the selected category.">
+                                        </i>
+                                        <h3 class="h6 mb-0">Hours by category</h3>
+
+                                    </div>
+                                    <span class="badge bg-light text-muted">{% if period =="today" %}Today{% else %}Last
+                                        7 days{% endif %}</span>
+                                </div>
                                 {% if chart_divs %}
                                 {{ chart_divs.div_today_by_category | safe }}
                                 {% else %}
@@ -254,6 +266,16 @@
                             <!-- Card 1: Donut -->
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-info-circle chart-help text-muted" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows how much of your total tracked time belongs to the selected category compared to everything else.">
+                                            </i>
+                                            <h3 class="h6 mb-0">Category Share</h3>
+                                        </div>
+                                        <span class="badge bg-light text-muted">{{ selected_category }}</span>
+                                    </div>
                                     {% if chart_divs %}
                                     {{ chart_divs.div_category_share | safe }}
                                     {% else %}
@@ -265,6 +287,17 @@
                             <!-- Card 2: Subcategory breakdown -->
                             <div class="card flex-grow-1">
                                 <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-info-circle chart-help text-muted" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Shows the breakdown of time spent within the selected category, by subcategory.">
+                                            </i>
+                                            <h3 class="h6 mb-0">Subcategory Breakdown</h3>
+                                        </div>
+                                        <span class="badge bg-light text-muted">{{ selected_category }}</span>
+
+                                    </div>
                                     {% if chart_divs %}
                                     {{ chart_divs.div_subcategory_breakdown | safe }}
                                     {% else %}
@@ -280,7 +313,16 @@
                     <div class="col-12">
                         <div class="card mt-3">
                             <div class="card-body">
-                                <h3 class="h6">Trend</h3>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-info-circle chart-help text-muted" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Daily time trend over the last 7 days. The highlighted line shows the selected category; other categories are shown for context.">
+                                        </i>
+                                        <h3 class="h6 mb-0">Trend - Last 7 days</h3>
+                                    </div>
+                                    <span class="badge bg-light text-muted">{{ selected_category }}</span>
+                                </div>
                                 {{ chart_divs.div_weekly_trend | safe }}
                             </div>
                         </div>
