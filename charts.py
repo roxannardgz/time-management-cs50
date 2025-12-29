@@ -62,6 +62,8 @@ def category_share_donut(df):
 def fig_to_div(fig):
     return pio.to_html(fig, full_html=False, include_plotlyjs="cdn")
 
+
+
 def apply_theme(fig, *, show_legend=False):
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",

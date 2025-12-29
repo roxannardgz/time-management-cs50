@@ -398,7 +398,7 @@ def dashboard():
     # 
     if period == "week":
         period_total_seconds = days_in_period * 24 * 3600
-        period_label = f"{days_in_period} days"
+        period_label = f"{days_in_period * 24}h"
     else:
         period_total_seconds = 24 * 3600
         period_label = "24h"
