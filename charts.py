@@ -2,6 +2,11 @@ import plotly.express as px
 import plotly.io as pio
 import pandas as pd
 
+from config import CATEGORY_SHORT, SUBCAT_SHORT
+
+# Catgory mapping
+def short_label(name: str, mapping: dict[str, str]) -> str:
+    return mapping.get(name, name)
 
 # Theme to apply to all charts
 def apply_theme(fig, *, show_legend=False):
@@ -30,10 +35,13 @@ def apply_theme(fig, *, show_legend=False):
 def today_by_category(df, selected_category):
     df = df.sort_values("total_time_spent_hours", ascending=True)
 
+    df = df.copy()
+    df["category_short"] = df["category"].map(lambda x: short_label(x, CATEGORY_SHORT))
+
     fig = px.bar(
         df,
         x="total_time_spent_hours",
-        y="category",
+        y="category_short",
         orientation="h",
         title=None,
     )
@@ -51,7 +59,8 @@ def today_by_category(df, selected_category):
 
     # tooltip
     fig.update_traces(
-        hovertemplate="%{y}<br>%{x:.2f} hours<extra></extra>"
+        hovertemplate="%{customdata[0]}<br>%{x:.2f} hours<extra></extra>",
+        customdata=df[["category"]].to_numpy(),
     )
 
     return fig
@@ -61,10 +70,12 @@ def today_by_category(df, selected_category):
 # Bar chart for selected subcategory breakdown
 def subcategories_breakdown(df, selected_category):
     df = df.sort_values("total_time_spent_hours", ascending=True)
+    df = df.copy()
+    df["subcategory_short"] = df["subcategory"].map(lambda x: short_label(x, SUBCAT_SHORT))
 
     fig = px.bar(
         df,
-        x="subcategory",
+        x="subcategory_short",
         y="total_time_spent_hours",
     )
 
@@ -72,7 +83,8 @@ def subcategories_breakdown(df, selected_category):
     fig.update_traces(
         marker=dict(color="#bc783d"),
         marker_line_width=0,
-        hovertemplate="%{x}<br>%{y:.2f} hours<extra></extra>",
+        hovertemplate="%{customdata[0]}<br>%{y:.2f} hours<extra></extra>",
+        customdata=df[["subcategory"]].to_numpy(),
     )
 
     # No chart title; axis labels optional (I’d remove to keep it clean)
