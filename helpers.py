@@ -45,9 +45,9 @@ def login_required(f):
     return decorated_function
 
 
-
 def seconds_to_hhmm(seconds):
     hours = seconds // 3600
     minutes = (seconds % 3600) // 60
-    return f"{int(hours):02d}:{int(minutes):02d}"
+    return f"{int(hours)}h{int(minutes):02d}m"
+
 

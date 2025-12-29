@@ -89,7 +89,6 @@ main {
 
 .category-card {
     background-color: #fffdf8;
-    /* very light cream */
     border: 1px solid #ffeed1;
     border-radius: 14px;
     padding: 14px 16px;
@@ -125,11 +124,8 @@ main {
 
 .status-pill {
     background-color: #fbf5eb;
-    /* light background */
     color: #1F1D20;
-    /* main text */
     border: 1px solid #e0d8c8;
-    /* optional, subtle */
 }
 
 .status-pill--active {
@@ -142,98 +138,97 @@ main {
     color: #777;
 }
 
-.kpis .kpi-value {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
-.kpi-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background-color: #fbf5eb;
-    border: 1px solid #e0d8c8;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.kpi-icon i {
-    font-size: 1.1rem;
-    color: #4c2e19;
-}
-
-.kpi-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-}
-
-.kpi-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.kpi-title {
-    letter-spacing: 0.08em;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.kpi-main {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-}
-
-.kpi-big {
-    font-size: 1.6rem;
-    font-weight: 700;
-}
-
-.kpi-footer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-}
-
-.kpi-sub {
-    font-size: 0.85rem;
-    white-space: nowrap;
-}
+/* =========================
+   KPIs
+   ========================= */
 
 /* Icon square */
 .kpi-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
     background-color: #fbf5eb;
     border: 1px solid #e0d8c8;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-}
-
-.kpi-icon i {
-    font-size: 1.2rem;
     color: #4c2e19;
 }
 
-/* Progress bar styling */
+.kpi-icon i {
+    color: inherit;
+}
+
+/* Big-card icon */
+.kpi-icon--md {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+}
+
+.kpi-icon--md i {
+    font-size: 0.9rem;
+}
+
+/* Small-card icon */
+.kpi-icon--sm {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+}
+
+.kpi-icon--sm i {
+    font-size: 0.8rem;
+}
+
+/* -------- Big KPI cards -------- */
+.kpi-big-compact {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 14px !important;
+}
+
+/* Row: icon + title (top-left) */
+.kpi-big-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kpi-big-title {
+    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #1F1D20;
+}
+
+/* Main value: centered in available space */
+.kpi-big-value {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #1F1D20;
+}
+
+/* Bottom row: progress + label (bottom) */
+.kpi-big-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+/* Progress bar */
 .kpi-progress {
-    height: 10px;
-    width: 60%;
+    flex: 1;
+    height: 8px;
     background-color: #e9e5dd;
     border-radius: 999px;
+    overflow: hidden;
 }
 
 .kpi-progress .progress-bar {
@@ -241,31 +236,34 @@ main {
     border-radius: 999px;
 }
 
-/* Small cards */
-.kpi-card--small .kpi-big {
-    font-size: 1.4rem;
+
+/* -------- Small KPI cards -------- */
+.kpi-mini-card {
+    border-radius: 12px;
 }
 
-.kpi-header--small {
-    justify-content: center;
+.kpi-mini-body {
+    position: relative;
+    padding: 8px !important;
+    min-height: 68px;
 }
 
-.kpi-icon--small {
-    width: 40px;
-    height: 40px;
+/* Number in top-right */
+.kpi-small-value {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #1F1D20;
 }
 
-
-
-
-
-/* Colors
-#1F1D20
-#b96d33
-
-#4c2e19
-#fff2d3
-#b16630
-#e49e5b
-#fff2d3
-*/
+/* Title under the icon (left side) */
+.kpi-small-title {
+    margin-top: 6px;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    color: #1F1D20;
+}
