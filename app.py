@@ -8,7 +8,6 @@ from markupsafe import Markup
 
 from config import CATEGORIES
 
-import traceback
 import charts
 import pandas as pd
 
