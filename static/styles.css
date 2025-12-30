@@ -1,7 +1,13 @@
+/* -------------------------------------
+   BASE / LAYOUT
+   ------------------------------------- */
+
+/* Navbar */
 .navbar-dark {
     background-color: #1F1D20;
 }
 
+/* Sticky footer layout */
 html,
 body {
     height: 100%;
@@ -17,18 +23,46 @@ main {
     flex: 1;
 }
 
+/* Utility: center content vertically + horizontally */
 .main-center-y {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Palette (reference)
+#1F1D20  dark
+#4c2e19  brown
+#bc783d  orange-brown
+#e19b56  hover orange
+#ffeed1  cream
+#fbf5eb  light cream
+*/
+
+
+/* -------------------------------------
+   PAGE SECTIONS
+   ------------------------------------- */
+
+/* Right side background (login / signup) */
 .filled-side {
     background: linear-gradient(to bottom,
             #fffdf8 0%,
             #fff7e9 40%,
             #ffeed1 100%);
 }
+
+/* Accent word inside headings */
+.accent-word {
+    color: #4c2e19;
+    font-weight: inherit;
+    font-style: italic;
+}
+
+
+/* -------------------------------------
+   BUTTON THEME OVERRIDES (BOOTSTRAP)
+   ------------------------------------- */
 
 .btn-primary {
     background-color: #4c2e19;
@@ -60,32 +94,32 @@ main {
     color: #4c2e19;
 }
 
-.accent-word {
-    color: #4c2e19;
-    font-weight: inherit;
-    font-style: italic;
-}
 
-.dashboard-tracker {
-    max-width: 560px;
-}
+/* -------------------------------------
+   FORMS / INPUTS
+   ------------------------------------- */
 
-
-
-.tracker-btn {
-    white-space: nowrap;
-}
-
-@media (min-width: 768px) {
-    .tracker-btn {
-        width: 130px;
-    }
-}
-
+/* Add space above the input-group (used in login/signup) */
 .input-group {
     margin-top: 0.25rem;
 }
 
+/* Password toggle button */
+.toggle-password {
+    background-color: #fbf5eb;
+    border-color: #d6d3cf;
+}
+
+.toggle-password:hover {
+    background-color: #ffeed1;
+    border-color: #bc783d;
+    color: #1F1D20;
+}
+
+
+/* -------------------------------------
+   ACTIVITIES PAGE (CATEGORY CARDS)
+   ------------------------------------- */
 
 .category-card {
     background-color: #fffdf8;
@@ -105,22 +139,37 @@ main {
     margin-top: 10px;
 }
 
+/* When category is open */
 .category-card.is-open {
     box-shadow: 0 8px 20px rgba(31, 29, 32, 0.08);
     border-color: #e19b56;
 }
 
 
-.toggle-password {
-    background-color: #fbf5eb;
-    border-color: #d6d3cf;
+/* -------------------------------------
+   DASHBOARD TRACKER (START/STOP AREA)
+   ------------------------------------- */
+
+.dashboard-tracker {
+    max-width: 560px;
 }
 
-.toggle-password:hover {
-    background-color: #ffeed1;
-    border-color: #bc783d;
-    color: #1F1D20;
+/* Prevent button text wrapping */
+.tracker-btn {
+    white-space: nowrap;
 }
+
+/* Give the tracker button a fixed width on desktop */
+@media (min-width: 768px) {
+    .tracker-btn {
+        width: 130px;
+    }
+}
+
+
+/* -------------------------------------
+   STATUS PILL (NOW TRACKING / NO SESSION)
+   ------------------------------------- */
 
 .status-pill {
     background-color: #fbf5eb;
@@ -138,11 +187,12 @@ main {
     color: #777;
 }
 
-/* =========================
-   KPIs
-   ========================= */
 
-/* Icon square */
+/* -------------------------------------
+   KPI CARDS
+   ------------------------------------- */
+
+/* Shared icon square */
 .kpi-icon {
     background-color: #fbf5eb;
     border: 1px solid #e0d8c8;
@@ -157,7 +207,7 @@ main {
     color: inherit;
 }
 
-/* Big-card icon */
+/* Icon sizes */
 .kpi-icon--md {
     width: 34px;
     height: 34px;
@@ -168,7 +218,6 @@ main {
     font-size: 0.9rem;
 }
 
-/* Small-card icon */
 .kpi-icon--sm {
     width: 26px;
     height: 26px;
@@ -179,7 +228,7 @@ main {
     font-size: 0.8rem;
 }
 
-/* -------- Big KPI cards -------- */
+/* Big KPI cards ------------------------------------- */
 .kpi-big-compact {
     display: flex;
     flex-direction: column;
@@ -187,7 +236,7 @@ main {
     padding: 14px !important;
 }
 
-/* Row: icon + title (top-left) */
+/* Top row: icon + title */
 .kpi-big-top {
     display: flex;
     align-items: center;
@@ -201,7 +250,7 @@ main {
     color: #1F1D20;
 }
 
-/* Main value: centered in available space */
+/* Centered value (time / category name) */
 .kpi-big-value {
     flex: 1;
     display: flex;
@@ -214,7 +263,7 @@ main {
     color: #1F1D20;
 }
 
-/* Bottom row: progress + label (bottom) */
+/* Bottom row: progress + label */
 .kpi-big-bottom {
     display: flex;
     align-items: center;
@@ -236,8 +285,7 @@ main {
     border-radius: 999px;
 }
 
-
-/* -------- Small KPI cards -------- */
+/* Small KPI cards ------------------------------------- */
 .kpi-mini-card {
     border-radius: 12px;
 }
@@ -248,7 +296,7 @@ main {
     min-height: 68px;
 }
 
-/* Number in top-right */
+/* Value in top-right */
 .kpi-small-value {
     position: absolute;
     top: 8px;
@@ -259,7 +307,7 @@ main {
     color: #1F1D20;
 }
 
-/* Title under the icon (left side) */
+/* Title under the icon (left) */
 .kpi-small-title {
     margin-top: 6px;
     font-size: 0.62rem;
@@ -268,8 +316,11 @@ main {
     color: #1F1D20;
 }
 
-/* ------------------------------------ */
-/* Tootip more info */
+
+/* -------------------------------------
+   CHART HELP (TOOLTIP ICON)
+   ------------------------------------- */
+
 .chart-help {
     font-size: 0.85rem;
     cursor: help;
