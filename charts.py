@@ -74,7 +74,6 @@ def today_by_category(df, selected_category):
     return fig
 
 
-
 # Bar chart for selected subcategory breakdown
 def subcategories_breakdown(df, selected_category):
     df = df.copy()

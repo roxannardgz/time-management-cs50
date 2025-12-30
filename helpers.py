@@ -50,4 +50,7 @@ def seconds_to_hhmm(seconds):
     minutes = (seconds % 3600) // 60
     return f"{int(hours)}h{int(minutes):02d}m"
 
-
+def seconds_to_hhmm_colon(seconds):
+    h = seconds // 3600
+    m = (seconds % 3600) // 60
+    return f"{int(h):02d}:{int(m):02d}"

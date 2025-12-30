@@ -1,8 +1,39 @@
 {% extends "layout.html" %}
-
-{% block title %}Sessions{% endblock %}
+{% block title %}History{% endblock %}
 
 {% block content %}
-<h1>Sessions</h1>
-<p>Sessions page placeholder.</p>
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 mb-0">Sessions History</h2>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr class="text-muted small">
+                    <th>Category</th>
+                    <th>Subcategory</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th class="text-end">Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in sessions %}
+                <tr>
+                    <td>{{ s.category }}</td>
+                    <td>{{ s.subcategory }}</td>
+                    <td class="text-muted">{{ s.start_time }}</td>
+                    <td class="text-muted">{{ s.end_time }}</td>
+                    <td class="text-end fw-semibold">{{ s.duration }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">No sessions yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

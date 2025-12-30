@@ -3,7 +3,7 @@ from datetime import datetime
 from functools import wraps
 import os
 
-from helpers import get_db, close_db, login_required, seconds_to_hhmm
+from helpers import get_db, close_db, login_required, seconds_to_hhmm, seconds_to_hhmm_colon
 from werkzeug.security import check_password_hash, generate_password_hash
 from markupsafe import Markup
 
@@ -80,12 +80,6 @@ def add_no_cache_headers(response):
 @app.route("/")
 def index():
     return render_template("index.html")
-
-
-@app.route("/sessions")
-def sessions():
-    return render_template("sessions.html")
-
 
 
 # Create account
@@ -569,6 +563,41 @@ def logout():
 
     # Redirect the user to the main page
     return redirect(url_for("index"))
+
+
+@app.route("/sessions")
+@login_required
+def sessions():
+    print(">>> HIT /sessions route")
+    db = get_db()
+
+    rows = db.execute(
+        """
+        SELECT
+            category,
+            subcategory,
+            start_time,
+            end_time,
+            duration_seconds
+        FROM vw_events_facts
+        WHERE user_id = ?
+        ORDER BY start_time DESC
+        """,
+        (g.user["user_id"],)
+    ).fetchall()
+
+    sessions = []
+    for r in rows:
+        sessions.append({
+            "category": r["category"],
+            "subcategory": r["subcategory"],
+            "start_time": r["start_time"],
+            "end_time": r["end_time"],
+            "duration": seconds_to_hhmm_colon(int(r["duration_seconds"] or 0)),
+        })
+    print("HISTORY SESSIONS COUNT:", len(sessions))
+
+    return render_template("sessions.html", sessions=sessions)
 
 
 @app.template_filter("format_time")
