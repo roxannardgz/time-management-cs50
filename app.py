@@ -104,6 +104,11 @@ def signup():
             flash("All fields are required.")
             return render_template("signup.html")
         
+        # Password length
+        if len(password) < 8:
+            flash("Password must be at least 8 characters long.", "warning")
+            return render_template("signup.html")
+        
         # Hash password
         hash = generate_password_hash(password)
 
