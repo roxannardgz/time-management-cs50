@@ -87,32 +87,36 @@
 
     <!-- Row 2: Dashboard Section -->
     <section class="mb-4">
-        <div class="card">
+        <div class="card dashboard-shell">
             <div class="card-body p-4">
 
                 <!-- Dashboard header: view and category selector -->
-                <div class="d-flex align-items-center justify-content-end mb-3">
+                <div class="dashboard-controls mb-3">
+                    <div class="d-flex align-items-center justify-content-end p-3 p-md-4">
+                        <form method="get" class="d-flex align-items-center gap-2">
+                            <label for="periodSelect" class="form-label mb-0 small text-muted">View</label>
+                            <select id="periodSelect" name="period" class="form-select form-select-sm"
+                                onchange="this.form.submit()">
+                                <option value="today" {% if period=="today" %}selected{% endif %}>Today</option>
+                                <option value="week" {% if period=="week" %}selected{% endif %}>Last 7 days</option>
+                            </select>
 
-                    <form method="get" class="d-flex align-items-center gap-2">
-                        <label for="periodSelect" class="form-label mb-0 small text-muted">View</label>
-                        <select id="periodSelect" name="period" class="form-select form-select-sm"
-                            onchange="this.form.submit()">
-                            <option value="today" {% if period=="today" %}selected{% endif %}>Today</option>
-                            <option value="week" {% if period=="week" %}selected{% endif %}>Last 7 days</option>
-                        </select>
+                            <span class="controls-divider d-none d-md-block"></span>
 
-                        <label for="dashboardCategorySelect"
-                            class="form-label mb-0 small text-muted ms-2">Category</label>
-                        <select id="dashboardCategorySelect" name="category" class="form-select form-select-sm w-auto"
-                            onchange="this.form.submit()">
-                            {% for category in categories_available %}
-                            <option value="{{ category }}" {% if category==selected_category %}selected{% endif %}>{{
-                                category }}</option>
-                            {% endfor %}
-                        </select>
-                    </form>
-
+                            <label for="dashboardCategorySelect"
+                                class="form-label mb-0 small text-muted ms-2 ms-md-0">Category</label>
+                            <select id="dashboardCategorySelect" name="category"
+                                class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+                                {% for category in categories_available %}
+                                <option value="{{ category }}" {% if category==selected_category %}selected{% endif %}>
+                                    {{ category }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
                 </div>
+
 
 
 

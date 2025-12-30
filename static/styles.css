@@ -189,6 +189,33 @@ main {
 
 
 /* -------------------------------------
+   WIP
+   ------------------------------------- */
+
+/* Dashboard big card background */
+.dashboard-shell {
+    background-color: #faf9f7;
+    border: 1px solid #605e5b73;
+}
+
+/* Controls strip inside the same card */
+.dashboard-controls {
+    background-color: #e2d7c54a;
+    border-bottom: 1px solid #e0d8c8;
+    margin: -1.5rem -1.5rem 0 -1.5rem;
+}
+
+/* Vertical divider between the two dropdown groups */
+.controls-divider {
+    width: 1px;
+    height: 25px;
+    background: #38332c;
+    margin: 0 10px;
+}
+
+
+
+/* -------------------------------------
    KPI CARDS
    ------------------------------------- */
 
