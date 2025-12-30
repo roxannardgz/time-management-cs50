@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, session, redirect, url_for, g
 from datetime import datetime
 from functools import wraps
+import os
 
 from helpers import get_db, close_db, login_required, seconds_to_hhmm
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,7 +16,7 @@ import pandas as pd
 
 # Configure application
 app = Flask(__name__)
-app.secret_key = "dev"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 
