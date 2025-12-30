@@ -4,7 +4,12 @@ import pandas as pd
 
 from config import CATEGORY_SHORT, SUBCAT_SHORT
 
-# Catgory mapping
+# Colors
+accent_color = "#D6AB86"
+muted_color = "#e0d8c8"
+font_color = "#3E2C1C"
+
+# Category mapping: short labels for display
 def short_label(name: str, mapping: dict[str, str]) -> str:
     return mapping.get(name, name)
 
@@ -16,17 +21,16 @@ def apply_theme(fig, *, show_legend=False):
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(
             family="system-ui, -apple-system, Segoe UI, Roboto",
-            color="#1F1D20",
+            color=font_color,
             size=12
         ),
-        colorway=["#bc783d", "#4c2e19", "#e19b56", "#1F1D20"],
+        #colorway=["#bc783d", "#4c2e19", "#e19b56", "#1F1D20"],
         showlegend=show_legend,
         margin=dict(l=10, r=10, t=30, b=10),
-        title=dict(x=0, xanchor="left", font=dict(size=14, color="#1F1D20")),
     )
 
-    fig.update_xaxes(showgrid=False, zeroline=False, showline=False, ticks="")
-    fig.update_yaxes(showgrid=False, zeroline=False, showline=False, ticks="")
+    fig.update_xaxes(showgrid=False, zeroline=True, showline=False, ticks="")
+    fig.update_yaxes(showgrid=False, zeroline=True, showline=False, ticks="")
 
     return fig
 
@@ -52,9 +56,9 @@ def today_by_category(df, selected_category):
     colors = []
     for cat in df["category"]:
         if selected_category and cat == selected_category:
-            colors.append("#bc783d")   # accent
+            colors.append(accent_color)   # accent
         else:
-            colors.append("#e0d8c8")   # muted
+            colors.append(muted_color)   # muted
     fig.update_traces(marker_color=colors)
 
     # tooltip
@@ -63,70 +67,113 @@ def today_by_category(df, selected_category):
         customdata=df[["category"]].to_numpy(),
     )
 
+    fig.update_xaxes(title_text="Total time (hours)")
+    fig.update_yaxes(title_text=None)
+    fig.update_layout(height=500) 
+
     return fig
 
 
 
 # Bar chart for selected subcategory breakdown
 def subcategories_breakdown(df, selected_category):
-    df = df.sort_values("total_time_spent_hours", ascending=True)
     df = df.copy()
-    df["subcategory_short"] = df["subcategory"].map(lambda x: short_label(x, SUBCAT_SHORT))
+    df = df.sort_values("total_time_spent_hours", ascending=True)
 
+    # % within selected category
+    total = df["total_time_spent_hours"].sum()
+    df["pct"] = (df["total_time_spent_hours"] / total * 100) if total > 0 else 0
+
+    # Category mapping: short labels for x-axis
+    df["subcategory_short"] = df["subcategory"].map(lambda x: short_label(x, SUBCAT_SHORT))
+    
     fig = px.bar(
         df,
         x="subcategory_short",
-        y="total_time_spent_hours",
+        y="pct",
     )
 
-    # One consistent color
+    fig = apply_theme(fig)
+
     fig.update_traces(
-        marker=dict(color="#bc783d"),
+        marker=dict(color=accent_color),
         marker_line_width=0,
-        hovertemplate="%{customdata[0]}<br>%{y:.2f} hours<extra></extra>",
-        customdata=df[["subcategory"]].to_numpy(),
+
+        # show % on top of each bar
+        text=df["pct"].round(0).astype(int).astype(str) + "%", 
+        textposition="outside",
+        cliponaxis=False,
+
+        # tooltip: full name + hours and %
+        customdata=df[["subcategory", "total_time_spent_hours"]].to_numpy(),
+        hovertemplate="%{customdata[0]}<br>%{y:.0f}% of category<br>%{customdata[1]:.2f} hours<extra></extra>",
     )
 
-    # No chart title; axis labels optional (I’d remove to keep it clean)
     fig.update_layout(
         title=None,
         margin=dict(l=10, r=10, t=10, b=10),
     )
-    fig.update_yaxes(title=None, tickformat=".2f")
-    fig.update_xaxes(title=None)
-    fig.update_xaxes(tickangle=-25)
 
+    # Keep short names on x, remove axis title
+    fig.update_xaxes(title_text=None, tickangle=0)
 
-    return apply_theme(fig, show_legend=False)
+    # Hide y-axis completely
+    fig.update_yaxes(
+        title_text=None,
+        showticklabels=False,
+        ticks="",
+        showgrid=False,
+        zeroline=True,
+        showline=False,
+        rangemode="tozero",
+    )
 
+    fig.update_layout(height=240)
+
+    return fig
 
 
 # Donut chart for share of selected category of total time tracked
 def category_share_donut(df):
+    
+    total = df["hours"].sum()
+    selected_hours = float(df.iloc[0]["hours"]) if len(df) else 0
+    pct = (selected_hours / total * 100) if total > 0 else 0
+
     fig = px.pie(
         df,
         names="label",
         values="hours",
-        hole=0.62,
+        hole=0.8,
     )
 
+    fig = apply_theme(fig)
+
+    # Keep tooltips, remove slice text
     fig.update_traces(
-        marker=dict(colors=["#bc783d", "#e9e5dd"], line=dict(width=0)),
-        textinfo="percent",
-        textposition="inside",
+        marker=dict(colors=[accent_color, muted_color]),
+        textinfo="none",
+        hovertemplate="%{label}<br>%{value:.2f} hours<extra></extra>",
         sort=False,
-        hovertemplate="%{label}<br>%{value:.2f} hours (%{percent})<extra></extra>",
+        
     )
 
+    # Put only the selected % in the center
     fig.update_layout(
-        title=None,
-        height=180,
+        height=170,
         showlegend=False,
         margin=dict(l=0, r=0, t=0, b=0),
+        annotations=[
+            dict(
+                text=f"{pct:.0f}%",
+                x=0.5, y=0.5,
+                font=dict(size=22, color=font_color),
+                showarrow=False
+            )
+        ],
     )
 
-    return apply_theme(fig, show_legend=False)
-
+    return fig
 
 
 # Line chart for weekly trend - only week view
@@ -152,7 +199,6 @@ def weekly_trend_by_category(df, selected_category):
     df = grid.merge(df[["event_date", "category", "hours"]], on=["event_date", "category"], how="left")
     df["hours"] = df["hours"].fillna(0)
 
-
     fig = px.line(
         df,
         x="event_date",
@@ -161,8 +207,7 @@ def weekly_trend_by_category(df, selected_category):
         markers=True,
     )
 
-    muted = "#c9c6c0"
-    highlight = "#bc783d"
+    fig = apply_theme(fig)
 
     selected_trace = None
     other_traces = []
@@ -175,7 +220,7 @@ def weekly_trend_by_category(df, selected_category):
     # Style + collect traces
     for tr in fig.data:
         if tr.name == selected_category:
-            tr.line.color = highlight
+            tr.line.color = accent_color
             tr.line.width = 3.5
             tr.opacity = 1
 
@@ -185,7 +230,7 @@ def weekly_trend_by_category(df, selected_category):
 
             selected_trace = tr
         else:
-            tr.line.color = muted
+            tr.line.color = muted_color
             tr.line.width = 2
             tr.opacity = 0.35
             other_traces.append(tr)
@@ -199,8 +244,13 @@ def weekly_trend_by_category(df, selected_category):
         tr.line.shape = "spline"
         tr.line.smoothing = 0.4
 
-    return apply_theme(fig, show_legend=False)
+    fig.update_yaxes(title_text="Total time (hours)")
+    fig.update_xaxes(title_text=None, showgrid=False, zeroline=True, showline=False, ticks="")
 
+
+    fig.update_layout(height=280) 
+
+    return fig
 
 
 def fig_to_div(fig):

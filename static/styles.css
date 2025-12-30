@@ -267,3 +267,10 @@ main {
     font-weight: 600;
     color: #1F1D20;
 }
+
+/* ------------------------------------ */
+/* Tootip more info */
+.chart-help {
+    font-size: 0.85rem;
+    cursor: help;
+}
