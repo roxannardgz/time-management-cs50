@@ -1,7 +1,7 @@
 # OptiTrack: Time Tracking & Analytics Dashboard
 
-*Harvard's CS50x: Introduction to Computer Science - Final Project*
-
+*Harvard's CS50x: Introduction to Computer Science - Final Project*<br>
+[Video demo](https://youtu.be/8pinH4rlWbU)
 
 ## Overview
 

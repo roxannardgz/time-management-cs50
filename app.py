@@ -13,7 +13,6 @@ import charts
 import pandas as pd
 
 
-
 # Configure application
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev")
@@ -64,8 +63,6 @@ def require_setup_if_needed():
 
     if request.endpoint not in allowed_endpoints:
         return redirect(url_for("activities"))
-
-# TODO; restrict access to certain pages after login (e.g landing page, signup page...)
 
 
 @app.after_request
