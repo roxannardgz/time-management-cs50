@@ -30,6 +30,43 @@ main {
     justify-content: center;
 }
 
+
+.step-img {
+    width: auto;
+    height: 120px;
+    object-fit: contain;
+}
+
+
+/* step num styling index page */
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: #fbf5eb;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #4c2e19;
+
+    margin: 0 auto 0.5rem;
+}
+
+.section-divider {
+    height: 1px;
+    width: 120px;
+    margin: 3rem auto;
+    background-color: #e0d8c8;
+}
+
+
+
 /* Palette (reference)
 #1F1D20  dark
 #4c2e19  brown
