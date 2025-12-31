@@ -576,12 +576,13 @@ def sessions():
         SELECT
             category,
             subcategory,
+            event_date,
             start_time,
             end_time,
             duration_seconds
         FROM vw_events_facts
         WHERE user_id = ?
-        ORDER BY start_time DESC
+        ORDER BY event_date DESC, start_time DESC
         """,
         (g.user["user_id"],)
     ).fetchall()
@@ -591,11 +592,11 @@ def sessions():
         sessions.append({
             "category": r["category"],
             "subcategory": r["subcategory"],
+            "event_date": r["event_date"],
             "start_time": r["start_time"],
             "end_time": r["end_time"],
             "duration": seconds_to_hhmm_colon(int(r["duration_seconds"] or 0)),
         })
-    print("HISTORY SESSIONS COUNT:", len(sessions))
 
     return render_template("sessions.html", sessions=sessions)
 

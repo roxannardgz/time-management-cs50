@@ -103,15 +103,15 @@
                     <span class="mb-3 mb-md-0 text-light">Roxanna Rodriguez</span>
                 </div>
 
-                <!-- TODO - put correct links -->
+                <!-- Links -->
                 <ul class="col-md-4 offset-md-4 nav justify-content-center justify-content-md-end list-unstyled d-flex">
                     <li class="ms-3">
-                        <a class="text-light" href="#" aria-label="GitHub">
+                        <a class="text-light" href="https://github.com/roxannardgz" aria-label="GitHub">
                             <i class="bi bi-github" aria-hidden="true"></i>
                         </a>
                     </li>
                     <li class="ms-3">
-                        <a class="text-light" href="#" aria-label="LinkedIn">
+                        <a class="text-light" href="https://www.linkedin.com/in/roxannardgz/" aria-label="LinkedIn">
                             <i class="bi bi-linkedin" aria-hidden="true"></i>
                         </a>
                     </li>
@@ -122,8 +122,6 @@
     </footer>
 
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
@@ -132,7 +130,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
-            /* ===== Toggle password visibility ===== */
+            /* Toggle password visibility */
             document.querySelectorAll(".toggle-password").forEach(btn => {
                 btn.addEventListener("click", () => {
                     const inputId = btn.getAttribute("data-target");
@@ -149,7 +147,7 @@
                 });
             });
 
-            /* ===== Bootstrap tooltips ===== */
+            /* Bootstrap tooltips */
             document
                 .querySelectorAll('[data-bs-toggle="tooltip"]')
                 .forEach(el => new bootstrap.Tooltip(el));
@@ -158,10 +156,9 @@
     </script>
     {% endblock %}
 
-
 </body>
 
 </html>
 
 
-<!--  <small>&copy; {{ current_year if current_year is defined }} Time Tracker</small>-->
+<!-- Reference note: all JS was written by chatGPT -->
