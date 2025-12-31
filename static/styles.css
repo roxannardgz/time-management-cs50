@@ -30,15 +30,25 @@ main {
     justify-content: center;
 }
 
+/* how it works section */
+.how-it-works .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-.step-img {
-    width: auto;
-    height: 120px;
-    object-fit: contain;
+.how-it-works .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.section-divider {
+    height: 1px;
+    width: 120px;
+    margin: 3rem auto;
+    background-color: #e0d8c8;
 }
 
 
-/* step num styling index page */
+/* steps section */
 .step-number {
     display: flex;
     align-items: center;
@@ -58,12 +68,13 @@ main {
     margin: 0 auto 0.5rem;
 }
 
-.section-divider {
-    height: 1px;
-    width: 120px;
-    margin: 3rem auto;
-    background-color: #e0d8c8;
+.step-img {
+    width: auto;
+    height: 120px;
+    object-fit: contain;
 }
+
+
 
 
 

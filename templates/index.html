@@ -31,69 +31,73 @@
 
 
     <!-- How it works -->
-    <section class="py-3">
-        <h2 class="text-center mb-4">How it works</h2>
+    <section class="py-3 how-it-works">
+        <section class="py-3">
+            <h2 class="text-center mb-4">How it works</h2>
 
-        <div class="row g-4">
-            <div class="col-md-3">
-                <div class="card h-100 text-center border-0">
-                    <div class="card-body">
-                        <div class="step-number mb-2">1</div>
-                        <img src="{{ url_for('static', filename='step1-img.png') }}" class="img-fluid mb-3 step-img"
-                            alt="Step 1 illustration">
-                        <h5 class="card-title">Create your account</h5>
-                        <p class="card-text small">
-                            Set up your profile and choose the areas of life you want to track
-                            (study, work, rest, hobbies, etc.).
-                        </p>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-0">
+                        <div class="card-body">
+                            <div class="step-number mb-2">1</div>
+                            <div class="step-img-wrapper">
+                                <img src="{{ url_for('static', filename='step1-img.png') }}" class="img-fluid step-img"
+                                    alt="Step 1 illustration">
+                            </div>
+                            <h5 class="card-title">Create your account</h5>
+                            <p class="card-text small">
+                                Set up your profile and choose the areas of life you want to track
+                                (study, work, rest, hobbies, etc.).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-0">
+                        <div class="card-body">
+                            <div class="step-number mb-2">2</div>
+                            <img src="{{ url_for('static', filename='step2-img.png') }}" class="img-fluid mb-3 step-img"
+                                alt="Step 2 illustration">
+                            <h5 class="card-title">Register activities</h5>
+                            <p class="card-text small">
+                                Start and stop sessions with one click whenever you begin or end
+                                an activity.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-0">
+                        <div class="card-body">
+                            <div class="step-number mb-2">3</div>
+                            <img src="{{ url_for('static', filename='step3-img.png') }}" class="img-fluid mb-3 step-img"
+                                alt="Step 3 illustration">
+                            <h5 class="card-title">See your time stats</h5>
+                            <p class="card-text small">
+                                Get a clear view of where your hours go each day, week, and month.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card h-100 text-center border-0">
+                        <div class="card-body">
+                            <div class="step-number mb-2">4</div>
+                            <img src="{{ url_for('static', filename='step4-img.png') }}" class="img-fluid mb-3 step-img"
+                                alt="Step 4 illustration">
+                            <h5 class="card-title">Optimize your schedule</h5>
+                            <p class="card-text small">
+                                Compare reality with your ideal week and adjust how you spend
+                                your time.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="card h-100 text-center border-0">
-                    <div class="card-body">
-                        <div class="step-number mb-2">2</div>
-                        <img src="{{ url_for('static', filename='step2-img.png') }}" class="img-fluid mb-3 step-img"
-                            alt="Step 2 illustration">
-                        <h5 class="card-title">Register activities</h5>
-                        <p class="card-text small">
-                            Start and stop sessions with one click whenever you begin or end
-                            an activity.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card h-100 text-center border-0">
-                    <div class="card-body">
-                        <div class="step-number mb-2">3</div>
-                        <img src="{{ url_for('static', filename='step3-img.png') }}" class="img-fluid mb-3 step-img"
-                            alt="Step 3 illustration">
-                        <h5 class="card-title">See your time stats</h5>
-                        <p class="card-text small">
-                            Get a clear view of where your hours go each day, week, and month.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card h-100 text-center border-0">
-                    <div class="card-body">
-                        <div class="step-number mb-2">4</div>
-                        <img src="{{ url_for('static', filename='step4-img.png') }}" class="img-fluid mb-3 step-img"
-                            alt="Step 4 illustration">
-                        <h5 class="card-title">Optimize your schedule</h5>
-                        <p class="card-text small">
-                            Compare reality with your ideal week and adjust how you spend
-                            your time.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </section>
 </div>
 {% endblock %}
