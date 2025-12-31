@@ -2,6 +2,11 @@
 __pycache__/
 *.pyc
 *.pyo
+venv/
+
+# Git
+.git/
+
 
 # Virtual environments
 venv/
@@ -11,9 +16,15 @@ venv/
 *.db
 *.sqlite
 *.sqlite3
+*.db-journal
 
 # VS Code
 .vscode/
 
 # macOS
 .DS_Store
+
+# VS Code
+.vscode/
+
+
